@@ -4,7 +4,7 @@
 /********************************************************************************************************************************/
 
 // Include class auto loader
-include './app/autoload.php';
+include './conf/app_config.php';
 
 // Create Admin app.
 $app = new app();

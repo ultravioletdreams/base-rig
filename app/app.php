@@ -8,6 +8,8 @@ class app
 // Constructor
 	function __construct()
 	{
+		// Use app_action class template as default app if one is not defined.
+		$this->current_app = defined('APP_DEFAULT_APP') ? APP_DEFAULT_APP : 'app_action';
 	}
 	
 /********************************************************************************************************************************/
@@ -15,7 +17,7 @@ class app
 	function execute()
 	{
 		// Check for requested app
-		$app_name = isset($_REQUEST['appx']) ? $_REQUEST['appx'] : 'app_default';
+		$app_name = isset($_REQUEST['appx']) ? $_REQUEST['appx'] : $this->current_app;
 		
 		// Check we have a registered application by that name
 		// TODO ... 

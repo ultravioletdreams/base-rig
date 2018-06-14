@@ -7,26 +7,28 @@ $(document).ready(function(){ startup(); });
 
 // Startup function
 function startup()
-{
-	// Create nutshell request object
-	//var xapp = new x_app();
-	// Send request for content_1
-	//xapp.req('content_1');
-	
+{	
 	// Attach button handlers
-	$('#example_action_one').on("click", example_action_one);
-	$('#example_action_two').on("click", example_action_two);
+	$('#list_tables').on("click", list_tables);
+	$('#test_entry').on("click", test_entry);
+	$('#reset_entries').on("click", reset_entries);
 }	
 
 // *** Test DB connection
-function example_action_one()
+function list_tables()
 {
 	var xreq = new x_app();
-	xreq.req('example_action_one');
+	xreq.req('list_tests');
 }
-
-function example_action_two()
+// *** Test DB connection
+function test_entry()
 {
 	var xreq = new x_app();
-	xreq.req('example_action_two');
+	xreq.req('test_entry');
+}
+// *** Test DB connection
+function reset_entries()
+{
+	var xreq = new x_app();
+	xreq.req('reset_entries');
 }
