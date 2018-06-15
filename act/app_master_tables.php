@@ -8,6 +8,8 @@ class app_master_tables extends app_response
 // Constructor
 	function __construct()
 	{
+		// Call parent class constructor
+		parent::__construct();
 	}
 	
 /********************************************************************************************************************************/
@@ -26,14 +28,20 @@ class app_master_tables extends app_response
 			
 			case 'test_entry':
 				$this->test_entry();
+				$this->list_tests();
 			break;
 			
 			case 'reset_entries':
 				$this->reset_entries();
+				$this->list_tests();
 			break;
 			
 			case 'list_tests':
 				$this->list_tests();
+			break;
+			
+			case 'test':
+				$this->return_response(false,true);
 			break;
 			
 			default:
@@ -51,14 +59,14 @@ class app_master_tables extends app_response
 	{
 		$target_data = array('debug' => 'Unknown action: ' . $app_action, 'content_one' => 'debug' );
 		$response_data = array('target_data' => $target_data);
-		$this->return_json($response_data);
+		$this->return_response($response_data);
 	}
 /********************************************************************************************************************************/	
 // Startup app view
 	function startup_view()
 	{
 		$response_body =  $this->template_html('./html/template.html',false);
-		$this->return_html($response_body);
+		$this->return_response($response_body);
 	}
 /********************************************************************************************************************************/
 // Create test entry
@@ -69,10 +77,8 @@ class app_master_tables extends app_response
 		// Insert test entry into db table.
 		$dbx = new app_test_db();
 		$result = 'New entry id: ' . $dbx->create_entry($data,$server_stamp);
-		
-		$target_data = array('content_one' => $result );
-		$response_data = array('target_data' => $target_data);
-		$this->return_json($response_data);
+		$this->set_response('content_one',$result);
+		//$this->return_response();
 	}
 /********************************************************************************************************************************/
 // reset_entries
@@ -82,9 +88,7 @@ class app_master_tables extends app_response
 		$dbx = new app_test_db();
 		$result = $dbx->error_msg . ' : ' . print_r($dbx->reset_entries(),true);
 		
-		$target_data = array('content_one' => $result );
-		$response_data = array('target_data' => $target_data);
-		$this->return_json($response_data);
+		$this->set_response('content_one',$result);
 	}
 /********************************************************************************************************************************/
 // List test entries
@@ -108,9 +112,7 @@ class app_master_tables extends app_response
 			$content .= '</ul>';
 		}
 		
-		$data = array('content_two' => $content);
-		$response = array('target_data' => $data);
-		$this->return_json($response);
+		$this->set_response('content_two',$content);
 	}
 /********************************************************************************************************************************/
 // END CLASS

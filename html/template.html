@@ -17,7 +17,8 @@
 	</head>
 
 	<body>
-		<!-- main container -->
+	
+		<!-- START: main container -->
 		<div class="main_container">
 		
 			<!-- Page Header -->	
@@ -26,21 +27,31 @@
 				<div class="page_title">Master Tables</div>
 			</div>
 			
-			<div class="page_left" id="content_one">
-			</div>
-			
-			<div class="page_content" id="content_two">
-			</div>
-			
-			<div style="clear:both;"></div>
-			
+			<div class="menu_bar">
 			<button id="list_tables" class="action_btn">List Test Entries</button>
 			<button id="test_entry" class="action_btn">Create Test Entry</button>
 			<button id="reset_entries" class="action_btn">Remove all test entries</button>
+			</div>
 			
-			<!-- *** Testing -->
-			<div id="debug"></div>
+			<!-- START: content -->
+			<div class="content">
+				<div style="clear:both;"></div>
+				
+				<div class="col_left" id="content_one"></div>
+				
+				<div class="col_right" id="content_two"></div>
+				
+				<div style="clear:both;"></div>
+				
+				<div id="footer">
+					<!-- *** Testing *** -->
+					<div id="debug"></div>
+				</div>
+			</div>
+			<!-- END: content -->
 			
 		</div>
+		<!-- END: main container -->
+		
 	</body>
 </html>

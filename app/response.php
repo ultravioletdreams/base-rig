@@ -5,11 +5,19 @@
 class response
 {
 /********************************************************************************************************************************/
+// Class variables
+	//$this->target_data = array();
+	// Response / JSON id of data for client side JS to look for.
+	//$this->target_id = 'target_data';
+
+
+/********************************************************************************************************************************/
 // Class constructor
 	function __construct()
 	{
 		// Call parent class constructor
 		//parent::__construct();
+		
 	}
 /********************************************************************************************************************************/
 // Generate HTML from template
@@ -32,8 +40,12 @@ class response
 	function return_response()
 	{
 		// Get Accept from request header
-		$accept = $_SERVER['HTTP_ACCEPT'];
-		$accept = explode(',',$accept);
+		//$accept = $_SERVER['HTTP_ACCEPT'];
+		//$accept = explode(',',$accept);
+		//print_r($accept);
+				$data = array('content_two' => 'TEST');
+				$response = array('target_data' => $data);
+				$this->return_json($response);
 	}
 /********************************************************************************************************************************/
 // Generate JSON from PHP array	
@@ -44,7 +56,6 @@ class response
 	}
 /********************************************************************************************************************************/
 // Generate HTML
-
 	function return_html($response_body)
 	{
 		header('Content-Type: text/html');

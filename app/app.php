@@ -25,6 +25,7 @@ class app
 		// Pass off execution to requested application
 		$app = new $app_name();
 		$app->execute();
+		if($app->response_returned === false) $app->return_response();
 	}
 
 /********************************************************************************************************************************/
