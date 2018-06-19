@@ -16,6 +16,9 @@ function x_app()
 		// Update page contents from response
 		console.log('REQUEST DONE.');
 		me.update_content(data);
+		// Call local JS functions specified in response
+		console.log('CALLING LOCAL JS.');
+		me.call_local_js(data);
 	}
 
 	// Handle failure off async call to update application view
@@ -39,6 +42,30 @@ function x_app()
 			$('#' + key).html(value);
 		});
 		console.log('UPDATE CONTENT DONE.');
+	}
+	
+	this.call_local_js = function(data)
+	{
+		$.each(data['call_local_js'],function (key,value){
+			console.log('CALL JS:' + key + ' : ' + value);
+			func_name = key;
+			// Call function
+			window[func_name]();
+		});
+	}
+	
+	this.form_submit = function()
+	{
+		console.log( "Ajax form submit..." );
+		// BEGIN AJAX
+		$.ajax({
+		url: 'index.php',
+		type: 'post',
+		dataType: 'json',
+		data: $('#form_1').serialize(),
+		success: function(data) { me.update_content(data); }
+		});
+		// END AJAX
 	}
 	
 // End of object

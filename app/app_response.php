@@ -17,13 +17,19 @@ class app_response
 		$this->target_data = array();
 		$this->target_data['response_info'] = 'App: V0.1 delta';
 		$this->target_data['target_data'] = false;
+		$this->target_data['call_local_js'] = array();
 		$this->target_data['target_data']['debug'] = 'O.K.';
 	}
 /********************************************************************************************************************************/
-// Response data getter and setter
+// Response data setter
 	function set_response($target_id,$data)
 	{
 		$this->target_data['target_data'][$target_id] = $data;
+	}
+	
+	function set_local_js($target_id,$data)
+	{
+		$this->target_data['call_local_js'][$target_id] = $data;
 	}
 
 /********************************************************************************************************************************/

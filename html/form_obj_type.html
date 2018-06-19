@@ -1,0 +1,23 @@
+<h2>Object Types</h2>
+<?php
+// New item form
+?>
+<form id="form_1" >
+<input type="hidden" id="ax" name="ax" value="new_item_1" >
+Type ID:   <input type="text" id="type_id" name="type_id" value="" >
+Type Name: <input type="text" id="type_name" name="type_name" value="" >
+<input type="submit" value="Enter" >
+</form>
+<?php
+// Item list
+?>
+<div id="item_list">
+<h1>List...</h1>
+<ul>
+<?php foreach($action_data['table_list'] as $row) { ?>
+
+<li><?php echo $row['id'] . ' - ' . $row['type_id'] . ' - ' . $row['type_name']; ?></li>
+
+<?php } ?>
+</ul>
+</div>

@@ -8,6 +8,8 @@ body
 #debug
 {
 	border:solid #f00 1px;
+	background-color:#fff;
+	color:#000;
 }
 
 .main_container

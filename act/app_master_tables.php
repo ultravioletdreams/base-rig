@@ -26,9 +26,39 @@ class app_master_tables extends app_response
 				$this->startup_view();
 			break;
 			
+			case 'select_table':
+				// Generate template data - list table contents
+				$dbx = new app_test_db();
+				$result = $dbx->list_all();
+				$page_data['table_list'] = $result;
+				// Send display template
+				$html_snip = $this->template_html('./html/form_obj_type.html',$page_data);
+				$this->set_response('content',$html_snip);
+				$this->set_local_js('attach_form_submit',false);
+			break;
+			
 			case 'test_entry':
-				$this->test_entry();
+				$this->create_test_entry();
 				$this->list_tests();
+			break;
+			
+			case 'new_item_1':
+				// CREATE
+				$tmp_db = new app_test_db();
+				$val_1 = isset($_REQUEST['type_id']) ? $_REQUEST['type_id'] : false;
+				$val_2 = isset($_REQUEST['type_name']) ? $_REQUEST['type_name'] : false;
+				if( $val_1 && $val_2)
+				{
+					$result = $tmp_db->create_master_entry($val_1,$val_2);
+					$this->set_response('debug','New ID: ' . $result);
+				}
+				else
+				{
+					$result = '<h3>Input data is invalid.</h3>';
+					$this->set_response('debug',$result);
+				}	
+				//
+				//$this->list_tests();
 			break;
 			
 			case 'reset_entries':
@@ -70,13 +100,13 @@ class app_master_tables extends app_response
 	}
 /********************************************************************************************************************************/
 // Create test entry
-	function test_entry()
+	function create_test_entry()
 	{
 		$data = 'TEST ENTRY';
 		$server_stamp = date("Y-m-d H:i:s");
 		// Insert test entry into db table.
 		$dbx = new app_test_db();
-		$result = 'New entry id: ' . $dbx->create_entry($data,$server_stamp);
+		$result = 'New entry id: ' . $dbx->create_test_entry($data,$server_stamp);
 		$this->set_response('content_one',$result);
 		//$this->return_response();
 	}
@@ -107,12 +137,12 @@ class app_master_tables extends app_response
 			$content = '<ul>';
 			foreach($result as $row)
 			{
-				$content .= '<li>' . $row['id'] . ' : ' . $row['data'] . ' : ' . $row['teststamp'] . '</li>';
+				$content .= '<li>' . $row['id'] . ' : ' . $row['type_id'] . ' : ' . $row['type_name'] . '</li>';
 			}
 			$content .= '</ul>';
 		}
 		
-		$this->set_response('content_two',$content);
+		$this->set_response('item_list',$content);
 	}
 /********************************************************************************************************************************/
 // END CLASS
