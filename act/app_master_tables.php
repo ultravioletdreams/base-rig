@@ -10,6 +10,9 @@ class app_master_tables extends app_response
 	{
 		// Call parent class constructor
 		parent::__construct();
+		
+		// ##$##$$ Clear content_one between actions
+		$this->set_response('content_one','');
 	}
 	
 /********************************************************************************************************************************/
@@ -32,14 +35,15 @@ class app_master_tables extends app_response
 				$result = $dbx->list_all();
 				$page_data['table_list'] = $result;
 				// Send display template
-				$html_snip = $this->template_html('./html/form_obj_type.html',$page_data);
+				$html_snip = $this->template_html('./res/html/form_obj_type.html',$page_data);
 				$this->set_response('content',$html_snip);
 				$this->set_local_js('attach_form_submit',false);
 			break;
 			
 			case 'test_entry':
-				$this->create_test_entry();
-				$this->list_tests();
+				//$this->create_test_entry();
+				//$this->list_tests();
+				$this->set_response('content_one','Function Disabled...');
 			break;
 			
 			case 'new_item_1':
@@ -62,8 +66,9 @@ class app_master_tables extends app_response
 			break;
 			
 			case 'reset_entries':
-				$this->reset_entries();
-				$this->list_tests();
+				//$this->reset_entries();
+				//$this->list_tests();
+				$this->set_response('content_one','Function Disabled...');
 			break;
 			
 			case 'list_tests':
@@ -95,7 +100,7 @@ class app_master_tables extends app_response
 // Startup app view
 	function startup_view()
 	{
-		$response_body =  $this->template_html('./html/template.html',false);
+		$response_body =  $this->template_html('./res/html/template.html',false);
 		$this->return_response($response_body);
 	}
 /********************************************************************************************************************************/

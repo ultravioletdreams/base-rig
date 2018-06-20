@@ -7,14 +7,16 @@ function attach_form_submit()
 {
 	console.log( "Attached to form submit button." );
 	
-	$( "#form_1" ).submit( function( event ) { do_form_submit(event); });
-}
-
-function do_form_submit(event)
-{
-	var xreq = new x_app();
-	xreq.form_submit();
-	event.preventDefault();
+	$("form").submit( function( event ) 
+	{
+		console.log('DO FORM SUBMIT ->');
+		// Get id of form that was submitted.
+		var form_id = $(this).closest("form").attr("id");
+		console.log(form_id);
+		var xreq = new x_app();
+		xreq.form_submit('#' + form_id);
+		event.preventDefault();
+	});
 }
 
 

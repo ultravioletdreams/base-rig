@@ -54,15 +54,15 @@ function x_app()
 		});
 	}
 	
-	this.form_submit = function()
+	this.form_submit = function(form_id)
 	{
-		console.log( "Ajax form submit..." );
+		console.log( "Ajax form submit: " + form_id + " ..." );
 		// BEGIN AJAX
 		$.ajax({
 		url: 'index.php',
 		type: 'post',
 		dataType: 'json',
-		data: $('#form_1').serialize(),
+		data: $(form_id).serialize(),
 		success: function(data) { me.update_content(data); }
 		});
 		// END AJAX

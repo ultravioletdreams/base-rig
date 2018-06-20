@@ -29,42 +29,66 @@ para('Row count:' . count($action_data['table_list']));
 
 // How many fields
 para('Field count:' . count($action_data['table_list'][0]));
+?>
 
-echo do_header($action_data);
+<div style="border:solid #f00 2px;padding:1em;"><?php echo do_list($action_data); ?></div>
 
-echo do_record($action_data['table_list'][0]);
+<?php
 
 // Full json
 para(json_encode($action_data));
 
-
-function do_header($action_data)
+// Functions 
+function do_list($action_data)
 {
-	$NL = "\n";
 	$html = '';
-	foreach($action_data['table_list'][0] as $item_id => $item_value)
+	if(isset($action_data['table_list']))
 	{
-		$html .= '<p>' . $item_id . '</p>' . $NL;
+		// Set table data
+		$table_data = $action_data['table_list'];
+		
+		if( count($table_data) > 0)
+		{	
+			foreach($table_data as $table_row)
+			{
+				$html .= do_row($table_row);
+			}
+		}
+		else
+		{
+			$html = 'No rows.';
+		}
 	}
-	
+	else
+	{
+		$html = 'No table data array: table_list';
+	}
 	return $html;
 }
 
-function do_record($record)
+function do_row($row)
 {
 	$NL = "\n";
-	$html = '<form id="" >' . $NL;
-	//foreach($record as $field)
-	//{
-	//	$html .= do_input($field);
-	//}
-	//$html .= '</form>' . $NL;
-	//return $html;
+	$html = '<form id="form_' . $row['id'] . '" >' . $NL;
+	$html .= '<input type="hidden" name="ax" value="update_item" >' . $NL;
+	$html .= '<input type="hidden" name="idx" value="' . $row['id'] . '" >' . $NL;
+	foreach($row as $field_value)
+	{
+		$field_data['type']  = 'text';
+		$field_data['name']  = 'text';
+		$field_data['value'] = $field_value;
+		$html .= do_input($field_data);
+	}
+	$html .= '<input type="submit" value="Update" >' . $NL;
+	$html .= '<button>Delete</button>' . $NL;
+	$html .= '</form>' . $NL;
+	return $html;
 }
 
 function do_input($field_data)
 {
 	$NL = "\n";
+	//$html = '<p>' . $field_data . '</p>';
 	$html = '<input type="' . $field_data['type'] . '" name="' . $field_data['name'] . '" value="' . $field_data['value'] . '" >' . $NL;
 	return $html;
 }
