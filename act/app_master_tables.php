@@ -11,12 +11,12 @@ class app_master_tables extends app_response
 		// Call parent class constructor
 		parent::__construct();
 		
-		// ##$##$$ Clear content_one between actions
-		$this->set_response('content_one','');
+		// Set app HTML template path
+		$this->html_template_path = './res/html/template.html';
 	}
 	
 /********************************************************************************************************************************/
-// Execute
+// Execute - Perform requested action
 	function execute()
 	{
 		// Check for requested action
@@ -25,10 +25,17 @@ class app_master_tables extends app_response
 		// Execute request action
 		switch($app_action)
 		{
+			// Return initial application HTML from template
 			case 'startup_view':
-				$this->startup_view();
+				$response_body =  $this->template_html($this->html_template_path,false);
+				$this->return_response($response_body);
 			break;
 			
+			case 'startup_js':
+				$this->set_local_js('select_table',false);
+			break;
+			
+			// Return test form to application content container div.
 			case 'select_table':
 				// Generate template data - list table contents
 				$dbx = new app_test_db();
@@ -40,12 +47,7 @@ class app_master_tables extends app_response
 				$this->set_local_js('attach_form_submit',false);
 			break;
 			
-			case 'test_entry':
-				//$this->create_test_entry();
-				//$this->list_tests();
-				$this->set_response('content_one','Function Disabled...');
-			break;
-			
+			// Create new item in DB and return result.
 			case 'new_item_1':
 				// CREATE
 				$tmp_db = new app_test_db();
@@ -61,94 +63,17 @@ class app_master_tables extends app_response
 					$result = '<h3>Input data is invalid.</h3>';
 					$this->set_response('debug',$result);
 				}	
-				//
-				//$this->list_tests();
 			break;
 			
-			case 'reset_entries':
-				//$this->reset_entries();
-				//$this->list_tests();
-				$this->set_response('content_one','Function Disabled...');
-			break;
-			
-			case 'list_tests':
-				$this->list_tests();
-			break;
-			
-			case 'test':
-				$this->return_response(false,true);
-			break;
-			
+			// Default - Unknown action requested.
 			default:
-				$this->default_action($app_action);
+				$this->set_response('debug','Unknown action: ' . $app_action);
 			break;
 		}
 	}
-/********************************************************************************************************************************/
-// ACTIONS
+	
 /********************************************************************************************************************************/
 
-/********************************************************************************************************************************/	
-// Default action
-	function default_action($app_action)
-	{
-		$target_data = array('debug' => 'Unknown action: ' . $app_action, 'content_one' => 'debug' );
-		$response_data = array('target_data' => $target_data);
-		$this->return_response($response_data);
-	}
-/********************************************************************************************************************************/	
-// Startup app view
-	function startup_view()
-	{
-		$response_body =  $this->template_html('./res/html/template.html',false);
-		$this->return_response($response_body);
-	}
-/********************************************************************************************************************************/
-// Create test entry
-	function create_test_entry()
-	{
-		$data = 'TEST ENTRY';
-		$server_stamp = date("Y-m-d H:i:s");
-		// Insert test entry into db table.
-		$dbx = new app_test_db();
-		$result = 'New entry id: ' . $dbx->create_test_entry($data,$server_stamp);
-		$this->set_response('content_one',$result);
-		//$this->return_response();
-	}
-/********************************************************************************************************************************/
-// reset_entries
-	function reset_entries()
-	{
-		// Truncate test table and reset sequence : reset identity
-		$dbx = new app_test_db();
-		$result = $dbx->error_msg . ' : ' . print_r($dbx->reset_entries(),true);
-		
-		$this->set_response('content_one',$result);
-	}
-/********************************************************************************************************************************/
-// List test entries
-	function list_tests()
-	{	
-		// List all test entries 
-		$dbx = new app_test_db();
-		$result = $dbx->list_all();
-		
-		if($result === false)
-		{
-			$content = 'NO DATA RETURNED, LAST ERROR: ' . $db->error_msg;
-		}
-		else
-		{
-			$content = '<ul>';
-			foreach($result as $row)
-			{
-				$content .= '<li>' . $row['id'] . ' : ' . $row['type_id'] . ' : ' . $row['type_name'] . '</li>';
-			}
-			$content .= '</ul>';
-		}
-		
-		$this->set_response('item_list',$content);
-	}
 /********************************************************************************************************************************/
 // END CLASS
 /********************************************************************************************************************************/

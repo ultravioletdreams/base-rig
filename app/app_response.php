@@ -15,10 +15,10 @@ class app_response
 		
 		// Target data 
 		$this->target_data = array();
-		$this->target_data['response_info'] = 'App: V0.1 delta';
-		$this->target_data['target_data'] = false;
-		$this->target_data['call_local_js'] = array();
-		$this->target_data['target_data']['debug'] = 'O.K.';
+		//$this->target_data['response_info'] = 'App: V0.1 delta';
+		//$this->target_data['target_data'] = false;
+		//$this->target_data['call_local_js'] = false;
+		//$this->target_data['target_data']['debug'] = 'O.K.';
 	}
 /********************************************************************************************************************************/
 // Response data setter
@@ -87,7 +87,7 @@ class app_response
 	function return_html($response_body)
 	{
 		header('Content-Type: text/html');
-		echo $response_body;
+		echo is_array($response_body) ? print_r($response_body,true) : $response_body;
 		$this->response_returned = true;
 	}
 /********************************************************************************************************************************/

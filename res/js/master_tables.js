@@ -2,30 +2,16 @@
 // Nutshell admin console Javascript functions.
 /*--------------------------------------------------------------------------------------------------------------------------------*/
 
-// *** ADDING IN FORM SUBMIT FUNCTIONS ***
-function attach_form_submit()
-{
-	console.log( "Attached to form submit button." );
-	
-	$("form").submit( function( event ) 
-	{
-		console.log('DO FORM SUBMIT ->');
-		// Get id of form that was submitted.
-		var form_id = $(this).closest("form").attr("id");
-		console.log(form_id);
-		var xreq = new x_app();
-		xreq.form_submit('#' + form_id);
-		event.preventDefault();
-	});
-}
-
-
 // Run startup when document is ready
 $(document).ready(function(){ startup(); });
 
 // Startup function
 function startup()
 {	
+	// Request local script calls from app.
+	var xreq = new x_app();
+	xreq.req('startup_js');
+	
 	// Attach button handlers
 	$('#list_tables').on("click", list_tables);
 	$('#test_entry').on("click", test_entry);

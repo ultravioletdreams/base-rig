@@ -2,10 +2,14 @@
 function x_app()
 {	
 	var me = this;
+	
+	// Set base request URL
+	this.request_url = 'index.php';
+	
 	// Get application layout from simple app controller 
 	this.req = function(action)
 	{
-		g_post = $.getJSON("index.php?async=1&ax=" + action,"");
+		g_post = $.getJSON("index.php?ax=" + action,"");
 		g_post.done(me.req_done);
 		g_post.fail(me.req_fail);
 	}
@@ -17,7 +21,6 @@ function x_app()
 		console.log('REQUEST DONE.');
 		me.update_content(data);
 		// Call local JS functions specified in response
-		console.log('CALLING LOCAL JS.');
 		me.call_local_js(data);
 	}
 
@@ -46,12 +49,27 @@ function x_app()
 	
 	this.call_local_js = function(data)
 	{
-		$.each(data['call_local_js'],function (key,value){
-			console.log('CALL JS:' + key + ' : ' + value);
-			func_name = key;
-			// Call function
-			window[func_name]();
-		});
+		console.log('CHECK FOR LOCAL_JS?');
+		if('call_local_js' in data)
+		{
+			console.log('Found!');
+			$.each(data['call_local_js'],function (fn_name,value){
+				console.log('Calling:' + fn_name);
+				try
+				{
+					// Call function
+					window[fn_name]();
+				}
+				catch(err)
+				{
+					console.log('Function not found:' + fn_name);
+				}
+			});
+		}
+		else
+		{
+			console.log('No local JS!');
+		}
 	}
 	
 	this.form_submit = function(form_id)
