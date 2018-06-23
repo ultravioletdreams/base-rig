@@ -20,7 +20,7 @@ function attach_actions()
 	var btns = $('.action_btn');
 	$.each(btns,function (key,value)
 	{
-		console.log('Button:' + key + ' : ' + $(value).attr('id'));
+		if(debug_mode > 1) console.log('Button:' + key + ' : ' + $(value).attr('id'));
 		$(value).off('click');
 		$(value).on('click',btn_action);
 	});
@@ -30,18 +30,17 @@ function btn_action()
 {
 	// Get button ID
 	button_id = $(this).attr('id');
-	console.log('btn_action() - Called - ' + button_id);
-	console.log('Button, ' + button_id + ' clicked.' );
-	console.log('Button, ' + $(this).data('idx') + ' clicked.' );
+	if(debug_mode) console.log('btn_action() - Called - ' + button_id + ', Button, ' + button_id + ' clicked.' );
+	// Get any data attributes from button
 	var action_params =  $(this).data();
-	console.log('TEST: ' + $(this).data());
+	// Send request 
 	send_action(button_id,action_params);
 }
 
 // Generic action sender
 function send_action(action_id,action_params)
 {
-	console.log('Sending request: ' + action_id);
+	if(debug_mode) console.log('Sending request: ' + action_id);
 	var xreq = new x_app();
 	xreq.ajax_req(action_id,action_params);
 }

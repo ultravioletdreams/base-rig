@@ -12,12 +12,16 @@ class app_response
 		//parent::__construct();
 		// Flag
 		$this->response_returned = false;
-		
+
+		// Application title
+		$this->app_title = 'DEFAULT: Application Title';
+
 		// Target data 
 		$this->target_data = array();
 		//$this->target_data['response_info'] = 'App: V0.1 delta';
 		//$this->target_data['target_data'] = false;
 		//$this->target_data['call_local_js'] = false;
+		//$this->target_data['callback_requests'] = false;
 		//$this->target_data['target_data']['debug'] = 'O.K.';
 	}
 /********************************************************************************************************************************/
@@ -26,12 +30,18 @@ class app_response
 	{
 		$this->target_data['target_data'][$target_id] = $data;
 	}
-	
+/********************************************************************************************************************************/
+// Response call local JS setter	
 	function set_local_js($target_id,$data)
 	{
 		$this->target_data['call_local_js'][$target_id] = $data;
 	}
-
+/********************************************************************************************************************************/
+// Send callback request in response
+	function set_callback($target_id,$data)
+	{
+		$this->target_data['callback_requests'][$target_id]= $data;
+	}
 /********************************************************************************************************************************/
 // Generate HTML from template
 	function template_html($template_path,$template_data)
@@ -42,11 +52,21 @@ class app_response
 		ob_start();
 		// Make action data available to the template as $action_data;
 		$action_data = $template_data;
+		$action_data['app_title'] = $this->app_title;
 		require($template_path);
 		$html = ob_get_clean();
 	
 		// Return generated (buffered) HTML
 		return $html;		
+	}
+
+/********************************************************************************************************************************/
+// Get POST request body and treat it as JSON
+	function get_post_body()
+	{
+		$entityBody = file_get_contents('php://input');
+		$post_json = json_decode($entityBody,true);
+		return $post_json; 
 	}
 /********************************************************************************************************************************/
 // Detect "accept" types and return appropriate response type

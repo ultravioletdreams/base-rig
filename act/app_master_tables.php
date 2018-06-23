@@ -2,7 +2,7 @@
 /********************************************************************************************************************************/
 // App default
 /********************************************************************************************************************************/
-class app_master_tables_v2 extends app_response
+class app_master_tables extends app_response
 {
 /********************************************************************************************************************************/
 // Constructor
@@ -37,70 +37,62 @@ class app_master_tables_v2 extends app_response
 	}	
 	
 /********************************************************************************************************************************/
-// Return initial application HTML from template
+// VIEW: Return initial application HTML from template
 	function startup_view()
 	{
 		$response_body =  $this->template_html($this->html_template_path,false);
 		$this->return_response($response_body);
 	}
-	
 /********************************************************************************************************************************/
+// ACTION: Calls local client JS to request startup content from app
 	function startup_js()
 	{
-		$this->set_local_js('send_action','content_form');
+		// Call local JS to request app content
+		$actions = array('input_form' => false, 'update_form' => false);
+		$this->target_data['callback_requests'] = $actions;
+		//$this->set_local_js('send_action','input_form');
+		//$this->set_local_js('send_action',$actions);
+		$this->set_local_js('otherstuff',false);
+		// Call local JS to attach app handler to action buttons
 		$this->set_local_js('attach_actions',false);
-		$this->set_local_js('attach_actions',false);
 	}
 /********************************************************************************************************************************/
-	function test_1()
+// VIEW: Input form - for creating new row / item into DB.
+	function input_form()
 	{
-		$this->set_response('content','<h1>TEST 1</h1>');
-		$this->set_local_js('send_action','test_2');
+		// Send display template for input form
+		$content = $this->template_html('./res/html/form_input_obj_type.html',false);
+		$this->set_response('input_form',$content);
+		// Call local JS to attach required request handler to input button
+		$this->set_local_js('attach_form_submit',false);
+		// Tell client JS to sned request for update list form
+		//$this->set_local_js('send_action','update_form');
 	}
+	
 /********************************************************************************************************************************/
-	function test_2()
+// ALIAS: $this->update_form()
+	function refresh_form()
 	{
-		$this->set_response('content','<h1>TEST 2</h1>');
+		$this->update_form();
 	}
 /********************************************************************************************************************************/
-	function test_3()
-	{
-		$this->set_response('content','<h1>TEST 3</h1>');
-	}
-/********************************************************************************************************************************/
-	function waste()
-	{
-		$counter = 0;
-		for($d=0;$d<1000;$d++)
-		{
-			$counter++;
-			for($f=0;$f<1000;$f++)
-			{
-				$counter++;
-				for($g=0;$g<100;$g++)
-				{
-					$counter++;
-				}
-			}
-		}
-		$this->set_response('content',"<h1>Counter = $counter</h1>");
-	}
-/********************************************************************************************************************************/
-	// Return test form to application content container div.
-	function content_form()
+// VIEW: List of update forms one for each DB row / item		
+	function update_form()
 	{
 		// Generate template data - list table contents
 		$dbx = new app_test_db();
 		$result = $dbx->select_all();
 		$page_data['table_list'] = $result;
-		// Send display template
-		$html_snip = $this->template_html('./res/html/form_obj_type.html',$page_data);
-		$this->set_response('content',$html_snip);
+		// Send display template for update form rendered with table data
+		$content = $this->template_html('./res/html/form_list_obj_type.html',$page_data);
+		$this->set_response('update_form',$content);
+		// Call local JS to attach required request handler to input button
 		$this->set_local_js('attach_form_submit',false);
+		// Call local JS to attach action handlers to buttons
 		$this->set_local_js('attach_actions',false);
 	}
 /********************************************************************************************************************************/
-	// Create new item in DB and return result.
+// ACTION: INSERT - Create new item in DB and return result.
 	function new_item_1()
 	{
 		// CREATE
@@ -119,10 +111,10 @@ class app_master_tables_v2 extends app_response
 		}	
 		
 		// Call refresh content form to see new item.
-		$this->set_local_js('send_action','content_form');
+		$this->set_local_js('send_action','update_form');
 	}
 /********************************************************************************************************************************/
-// UPDATE - 
+// ACTION: UPDATE - 
 	function update_item()
 	{
 		// Get request payload / decode to array
@@ -147,14 +139,14 @@ class app_master_tables_v2 extends app_response
 		else
 		{
 			// RESULT
-			$this->set_response('debug','Delted item number: ' . $result[0]['id']);
+			$this->set_response('debug','Updated item number: ' . $result[0]['id']);
 		}
 		//*/
 		// Call refresh content form to see result of update.
-		//$this->set_local_js('send_action','content_form');
+		$this->set_local_js('send_action','update_form');
 	}
 /********************************************************************************************************************************/
-// DELETE - 
+// ACTION: DELETE - 
 	function delete_item()
 	{
 		// Get request payload / decode to array
@@ -171,14 +163,14 @@ class app_master_tables_v2 extends app_response
 		else
 		{
 		// RESULT
-		$this->set_response('debug','Delted item number: ' . $result[0]['id']);
+		$this->set_response('debug','Deleted item number: ' . $result[0]['id']);
 		}
 		
 		// Call refresh content form to see result of delete.
-		$this->set_local_js('send_action','content_form');
+		$this->set_local_js('send_action','update_form');
 	}
 /********************************************************************************************************************************/
-// Default - Unknown action requested.
+// DEFAULT: Default - Unknown action requested.
 	function default_action($action_name)
 	{
 		$this->set_response('debug','Unknown action: ' . $action_name);
