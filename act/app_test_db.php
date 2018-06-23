@@ -10,6 +10,8 @@ class app_test_db extends app_db
 	{
 		// Call parent constructor
 		parent::__construct();
+		// Set table name that queries will operate on
+		$this->table_name = 'app_obj_types';
 	}
 //********************************************************************************************************************************		
 // Create entry into test table
@@ -51,10 +53,24 @@ class app_test_db extends app_db
 		
 	}
 //********************************************************************************************************************************		
-// List all entries in test table
-	function list_all($sensor_table_name='app_obj_types')
+// SELECT - Select all entries in test table
+	function select_all($sensor_table_name='app_obj_types')
 	{
-		$query_string = "SELECT * FROM $sensor_table_name ORDER BY type_name DESC LIMIT 100";
+		$query_string = "SELECT * FROM $this->table_name ORDER BY type_name DESC LIMIT 100";
+		return $this->db_query($query_string);
+	}
+//********************************************************************************************************************************		
+// UPDATE - Update single entry identified by id
+	function update_entry($entry_values)
+	{
+		$query_string = "UPDATE $this->table_name SET type_id = '" . $entry_values[1]  . "', type_name = '" . $entry_values[2] . "' WHERE id = '" . $entry_values[0] . "' RETURNING id;";
+		return $this->db_query($query_string);
+	}
+//********************************************************************************************************************************		
+// DELETE - Delete single entry identified by id
+	function delete_entry($entry_id)
+	{
+		$query_string = "DELETE FROM $this->table_name WHERE id = '" . $entry_id . "' RETURNING id;";
 		return $this->db_query($query_string);
 	}
 //********************************************************************************************************************************

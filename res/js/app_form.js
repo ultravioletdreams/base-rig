@@ -6,12 +6,12 @@
 function attach_form_submit()
 {
 	// Debug
-	console.log( "Attached to form submit button." );
+	if(debug_mode) console.log( "Attached to form submit button." );
 	
 	// Overide default form submit use async form submit.
 	$("form").submit( function( event ) 
 	{
-		console.log('DO FORM SUBMIT ->');
+		if(debug_mode) console.log('DO FORM SUBMIT ->');
 		// Get id of form that was submitted.
 		var form_id = $(this).closest("form").attr("id");
 		console.log(form_id);

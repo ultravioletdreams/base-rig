@@ -12,6 +12,7 @@
 		<!-- Default Stylesheet for minimum styling -->
 		<link rel="stylesheet" type="text/css" href="./res/css/normalize.css">
 		<link rel="stylesheet" type="text/css" href="./res/css/default.css">
+		<link rel="stylesheet" type="text/css" href="./res/css/app_forms.css">
 		
 		<!-- Title -->
 		<title>Master Tables</title>
@@ -29,11 +30,20 @@
 			</div>
 			
 			<div class="menu_bar">
-			<button id="list_tables" class="action_btn">List Test Entries</button>
-			<button id="test_entry" class="action_btn">Create Test Entry</button>
-			<button id="reset_entries" class="action_btn">Remove all test entries</button>
-			<button id="select_table" class="action_btn">Select table</button>
+				<button id="content_form" class="action_btn">Refresh View</button>
+				<button id="waste" class="action_btn">Waste Time</button>
+				<button id="test_1" class="action_btn">Test 1</button>
+				<button id="test_2" class="action_btn">Test 2</button>
+				<button id="test_3" class="action_btn">Test 3</button>
+				<button id="test_4" class="action_btn">Test 4</button>
 			</div>
+			
+			<!-- PROGRESSS INDICATOR -->
+			<div id="loading" class="loading"><img src="./res/img/busy.gif" ></div>
+			
+			
+			<!-- *** Testing *** -->
+			<div id="debug"></div>
 			
 			<!-- START: content -->
 			<div id="content" class="content">
@@ -53,9 +63,5 @@
 			
 		</div>
 		<!-- END: main container -->
-		
-		<!-- *** Testing *** -->
-		<div id="debug"></div>
-		
 	</body>
 </html>

@@ -6,9 +6,9 @@
 // Include class auto loader
 include './conf/app_config.php';
 
-// Create Admin app.
+// Create app obj
 $app = new app();
-// Execute Admin app. 
+// Execute app 
 $app->execute();
 
 /********************************************************************************************************************************/

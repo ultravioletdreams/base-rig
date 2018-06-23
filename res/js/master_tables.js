@@ -9,37 +9,39 @@ $(document).ready(function(){ startup(); });
 function startup()
 {	
 	// Request local script calls from app.
-	var xreq = new x_app();
-	xreq.req('startup_js');
+	send_action('startup_js');
 	
-	// Attach button handlers
-	$('#list_tables').on("click", list_tables);
-	$('#test_entry').on("click", test_entry);
-	$('#reset_entries').on("click", reset_entries);
-	$('#select_table').on("click", select_table);
-}	
+}
 
-// *** Test DB connection
-function list_tables()
+// Attach request to action buttons
+function attach_actions()
 {
-	var xreq = new x_app();
-	xreq.req('list_tests');
+	if(debug_mode) console.log('Attaching action handler to buttons.');
+	var btns = $('.action_btn');
+	$.each(btns,function (key,value)
+	{
+		console.log('Button:' + key + ' : ' + $(value).attr('id'));
+		$(value).off('click');
+		$(value).on('click',btn_action);
+	});
 }
-// *** Test DB connection
-function test_entry()
+
+function btn_action()
 {
-	var xreq = new x_app();
-	xreq.req('test_entry');
+	// Get button ID
+	button_id = $(this).attr('id');
+	console.log('btn_action() - Called - ' + button_id);
+	console.log('Button, ' + button_id + ' clicked.' );
+	console.log('Button, ' + $(this).data('idx') + ' clicked.' );
+	var action_params =  $(this).data();
+	console.log('TEST: ' + $(this).data());
+	send_action(button_id,action_params);
 }
-// *** Test DB connection
-function reset_entries()
+
+// Generic action sender
+function send_action(action_id,action_params)
 {
+	console.log('Sending request: ' + action_id);
 	var xreq = new x_app();
-	xreq.req('reset_entries');
-}
-// *** Test DB connection
-function select_table()
-{
-	var xreq = new x_app();
-	xreq.req('select_table');
+	xreq.ajax_req(action_id,action_params);
 }

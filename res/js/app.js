@@ -1,7 +1,12 @@
 // Nutshell request object
+
+var debug_mode = false;
+
 function x_app()
 {	
 	var me = this;
+	
+	this.request_id = false;
 	
 	// Set base request URL
 	this.request_url = 'index.php';
@@ -9,16 +14,39 @@ function x_app()
 	// Get application layout from simple app controller 
 	this.req = function(action)
 	{
-		g_post = $.getJSON("index.php?ax=" + action,"");
+		me.request_id = action;
+		$('#loading').show();
+		g_post = $.getJSON("index.php?ax=" + action,'');
 		g_post.done(me.req_done);
 		g_post.fail(me.req_fail);
+	}
+	
+	this.ajax_req = function(action,action_params)
+	{
+		me.request_id = action;
+		$('#loading').show();
+		$.ajax({
+			type: 'POST',
+			url: me.request_url + '?ax=' + action,
+			//url: me.request_url,
+			//data: '{"name":"jonas","idx":"' + action + '"}', // or JSON.stringify ({name: 'jonas'}),
+			data: JSON.stringify(action_params), // or JSON.stringify ({name: 'jonas'}),
+			success: me.req_done,
+			error: me.req_fail,
+			contentType: "application/json",
+			dataType: 'json'
+		});
 	}
 
 	// Update base template with application view conatiners and data
 	this.req_done = function(data)
 	{
+		$('#loading').hide();
 		// Update page contents from response
-		console.log('REQUEST DONE.');
+		if(debug_mode) console.log('Response recieved. ' + me.request_id);
+		
+		// Call response handlers
+		if(debug_mode) console.log('Calling response handlers.');
 		me.update_content(data);
 		// Call local JS functions specified in response
 		me.call_local_js(data);
@@ -27,61 +55,61 @@ function x_app()
 	// Handle failure off async call to update application view
 	this.req_fail = function (data)
 	{
-		console.log("Post Fail:" +  data.status + ":" + data.statusText);
+		$('#loading').hide();
+		if(debug_mode) console.log("Post Fail:" +  data.status + ":" + data.statusText);
 	}
 
 	// Update content elements by id
 	this.update_content = function(data)
 	{
-		console.log('UPDATE CONTENT:' + data);
+		if(debug_mode) console.log('Response handler: Update Content');
 		// Update targets with content data
 		//if(data['target_data'].length <= 0) console.log('No target_data.');
-		$.each(data['target_data'],function (key,value){
-			console.log('TARGET ELEMENT:' + key);
-			// Warn if target element id is not found
-			console.log('TARGET:' + key + ' : ' + $('#' + key).length );
-			if($('#' + key).length ) { console.log('TARGET:' + key + ' : ' + $('#' + key).length ); }
+		$.each(data['target_data'],function (key,value)
+		{
+			if(debug_mode) console.log('Updating: ' + key);
 			// Update inner HTML of element
 			$('#' + key).html(value);
 		});
-		console.log('UPDATE CONTENT DONE.');
+		if(debug_mode) console.log('Done.');
 	}
 	
 	this.call_local_js = function(data)
 	{
-		console.log('CHECK FOR LOCAL_JS?');
+		if(debug_mode) console.log('Response handler: Local JS');
 		if('call_local_js' in data)
 		{
-			console.log('Found!');
+			if(debug_mode) console.log('Found!');
 			$.each(data['call_local_js'],function (fn_name,value){
-				console.log('Calling:' + fn_name);
+				if(debug_mode) console.log('Calling:' + fn_name);
 				try
 				{
 					// Call function
-					window[fn_name]();
+					window[fn_name](value);
 				}
 				catch(err)
 				{
-					console.log('Function not found:' + fn_name);
+					if(debug_mode) console.log('Function not found:' + fn_name);
 				}
 			});
 		}
 		else
 		{
-			console.log('No local JS!');
+			if(debug_mode) console.log('No local JS!');
 		}
 	}
 	
 	this.form_submit = function(form_id)
 	{
-		console.log( "Ajax form submit: " + form_id + " ..." );
+		$('#loading').show();
+		if(debug_mode) console.log( "Ajax form submit: " + form_id + " ..." );
 		// BEGIN AJAX
 		$.ajax({
 		url: 'index.php',
 		type: 'post',
 		dataType: 'json',
 		data: $(form_id).serialize(),
-		success: function(data) { me.update_content(data); }
+		success: function(data) { me.req_done(data); }
 		});
 		// END AJAX
 	}
