@@ -12,7 +12,8 @@ class app_master_tables extends app_response
 		parent::__construct();
 		
 		// Set app HTML template path
-		$this->html_template_path = './res/html/template.html';
+		$this->html_template_path = './res/html/master_tables.html';
+		$this->app_title = 'Master Tables V1.0 Beta';
 	}
 
 /********************************************************************************************************************************/
