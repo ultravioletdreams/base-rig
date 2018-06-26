@@ -2,21 +2,34 @@
 // Attach app form submit handler to forms
 /*--------------------------------------------------------------------------------------------------------------------------------*/
 
-// *** ADDING IN FORM SUBMIT FUNCTIONS ***
 function attach_form_submit()
 {
-	// Debug
-	if(debug_mode > 1) console.log( "Attached to form submit button." );
+	console.log('FUNCTION: attach_form_submit');
 	
-	// Remove any previously attached events from from submit biuttons
-	$("form").off();
-	// Overide default form submit use async form submit.
-	$("form").submit( function( event ) 
+	// Get all forms on page and list their names
+	var myforms = $('form');
+	$.each(myforms, function(key,value)
 	{
-		if(debug_mode > 1) console.log('DO FORM SUBMIT ->');
+		console.log('FORM:' + key + ' : ' + $(value).attr('id'));
+		$(value).parsley();
+		$(value).parsley().on('form:submit', function() {
+			console.log('Form submit attempted.');
+			console.log(this.$element.attr('id'));
+			do_submit(this);
+			// Prevent default form submit
+			return false;
+		});
+	});
+}
+
+// Isolate the subit function
+function do_submit(me)
+{
+	if(debug_mode > 1) console.log('DO FORM SUBMIT ->');
 		// Get id of form that was submitted.
-		var form_id = $(this).closest("form").attr("id");
-		if(debug_mode > 1) console.log('SUBMITTING FORM: ' + form_id);
+		var form_id = me.$element.attr("id");
+		console.log('DO:' + form_id);
+		
 		var xreq = new x_app();
 		// Set form id of form to submit
 		xreq.form_id = '#' + form_id;
@@ -24,6 +37,4 @@ function attach_form_submit()
 		xreq.reset_form = true;
 		// Submit form
 		xreq.form_submit();
-		event.preventDefault();
-	});
 }

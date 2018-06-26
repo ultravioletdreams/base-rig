@@ -1,39 +1,36 @@
 <!-- BEGIN: Update Form List -->
-<div id="form-list" class="form-list">
-	<h1>List...</h1>
-	<div style="border:solid #f00 2px;padding:1em;"><?php echo do_list($action_data); ?></div>
-</div>
-<!-- END: Update Form List -->
+<h2>List of items in table: app_obj_types</h2>
+<!-- BEGIN: Result set forms-->
+<?php 
+$result_set = isset($action_data['result_set']) ? $action_data['result_set'] : array();
+if(count($result_set) > 0) { ?>
+<?php foreach($action_data['result_set'] as $result_row) { ?>
 
-<?php
-// Functions 
-function do_list($action_data)
-{
-	$html = '';
-	if(isset($action_data['table_list']))
-	{
-		// Set table data
-		$table_data = $action_data['table_list'];
-		
-		if( count($table_data) > 0)
-		{	
-			foreach($table_data as $table_row)
-			{
-				$html .= do_row($table_row);
-			}
-		}
-		else
-		{
-			$html = 'No rows.';
-		}
-	}
-	else
-	{
-		$html = 'No table data array: table_list';
-	}
-	return $html;
-}
+	<div class="form_list_item" >	
+		<form id="form_<?php echo $result_row['id'] ?>" data-parsley-trigger="focusin focusout" >
+		<input type="hidden" name="ax" value="update_item" >
+		<input type="hidden" name="idx" value="<?php echo $result_row['id'] ?>" >
+		<input type="hidden" name="id" value="<?php echo $result_row['id'] ?>" >
+		<div>
+		<label for="type_id" >Type Id</label>
+		<input type="text" id="type_id" name="type_id" data-restrict="numeric" value="<?php echo $result_row['type_id'] ?>" data-parsley-required data-parsley-type="integer" >
+		</div>
+		<div>
+		<label for="type_name" >Type Name</label>	<input type="text" id="type_name" name="type_name" value="<?php echo $result_row['type_name'] ?>" data-parsley-required data-parsley-minlength="4" >
+		</div>
+		<input type="submit" value="Update" >
+		</form>
+		<div style="width:100px;display:inline;"><button id="delete_item" class="action_btn" data-idx="<?php echo $result_row['id'] ?>">Delete</button></div>
+	</div>
 
+<?php } ?>
+<?php } else { ?>
+<h2>Empty result set. No items to list.</h2>
+<?php } ?>
+<!-- END: Result set forms-->
+	
+<?php 
+// FUTURE DEV: Dynamic form templates from JSON definitions
 function get_form_definition()
 {
 	$input_def_json = file_get_contents('./input_obj_types.json');
@@ -41,31 +38,5 @@ function get_form_definition()
 	echo $input_def_json . "\n";
 
 	$input_def = json_decode($input_def_json,true);
-}
-
-function do_row($row)
-{
-	$NL = "\n";
-	$html = '<form id="form_' . $row['id'] . '" >' . $NL;
-	$html .= '<input type="hidden" name="ax" value="update_item" >' . $NL;
-	$html .= '<input type="hidden" name="idx" value="' . $row['id'] . '" >' . $NL;
-	foreach($row as $field_name => $field_value)
-	{
-		$field_data['type']  = 'text';
-		$field_data['name']  = $field_name;
-		$field_data['value'] = $field_value;
-		$html .= do_input($field_data);
-	}
-	$html .= '<input type="submit" value="Update" >' . $NL;
-	$html .= '</form>' . $NL;
-	$html .= '<div style="width:100px;display:inline;"><button id="delete_item" class="action_btn" data-idy="1011" data-idz="Test1" data-idx="' . $row['id'] . '">Delete</button></div>' . $NL;
-	return $html;
-}
-
-function do_input($field_data)
-{
-	$NL = "\n";
-	$html = '<input type="' . $field_data['type'] . '" name="' . $field_data['name'] . '" value="' . $field_data['value'] . '" >' . $NL;
-	return $html;
 }
 ?>

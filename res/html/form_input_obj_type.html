@@ -2,27 +2,27 @@
 <div id="form-input" class="form-input">
 
 	<h2>Object Types - Create new.</h2>
-	<form id="form_1" action="#" method="post">
+	<form id="form_1" action="#" method="post" data-parsley-trigger="focusin focusout">
 	
-	<!-- Hidden Inputs -->
-	<input type="hidden" id="ax" name="ax" value="new_item_1" >
-	
-	<!-- Input 1 -->
-	<div>	
-		<label for="type_id">Type ID</label>   
-		<input type="text" id="type_id" name="type_id" value="" tabindex="1">
-	</div>
-	
-	<!-- Input 2 -->
-	<div>
-		<label for="type_name">Type Name</label>
-		<input type="text" id="type_name" name="type_name" value="" tabindex="2">
-	</div>
-	
-	<!-- Submit Button -->
-	<div>
-		<input type="submit" value="Enter" >
-	</div>
+		<!-- Hidden Inputs -->
+		<input type="hidden" id="ax" name="ax" value="new_item_1" >
+		
+		<!-- Input 1 -->
+		<div>	
+			<label for="type_id">Type ID</label>   
+			<input type="text" id="type_id" name="type_id" value="" tabindex="1" data-restrict="numeric" data-parsley-required data-parsley-type="integer" >
+		</div>
+		
+		<!-- Input 2 -->
+		<div>
+			<label for="type_name">Type Name</label>
+			<input type="text" id="type_name" name="type_name" value="" tabindex="2" data-parsley-required data-parsley-minlength="4" >
+		</div>
+		
+		<!-- Submit Button -->
+		<div>
+			<input type="submit" value="Enter" >
+		</div>
 	
 	</form>
 	

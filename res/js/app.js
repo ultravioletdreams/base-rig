@@ -1,12 +1,12 @@
 // Nutshell request object
 
-var debug_mode = 2;
+var debug_mode = false;
 
 function x_app()
 {	
 	var me = this;
 	
-	this.debug_mode = true;
+	this.debug_mode = false;
 	
 	this.request_id = false;
 	this.form_id = false;

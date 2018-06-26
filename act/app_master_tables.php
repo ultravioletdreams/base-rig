@@ -24,7 +24,7 @@ class app_master_tables extends app_response
 		$app_action = isset($_REQUEST['ax']) ? $_REQUEST['ax'] : 'startup_view';
 		
 		// Reset debug
-		$this->set_response('debug','');
+		//$this->set_response('debug','');
 		
 		if(method_exists($this,$app_action))
 		{
@@ -83,7 +83,7 @@ class app_master_tables extends app_response
 		// Generate template data - list table contents
 		$dbx = new app_test_db();
 		$result = $dbx->select_all();
-		$page_data['table_list'] = $result;
+		$page_data['result_set'] = $result;
 		// Send display template for update form rendered with table data
 		$content = $this->template_html('./res/html/form_list_obj_type.html',$page_data);
 		$this->set_response('update_form',$content);
@@ -169,12 +169,6 @@ class app_master_tables extends app_response
 		
 		// Call refresh content form to see result of delete.
 		$this->set_local_js('send_action','update_form');
-	}
-/********************************************************************************************************************************/
-// DEFAULT: Default - Unknown action requested.
-	function default_action($action_name)
-	{
-		$this->set_response('debug','Unknown action: ' . $action_name);
 	}
 /********************************************************************************************************************************/
 

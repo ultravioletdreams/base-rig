@@ -6,33 +6,13 @@ body
 
 #debug
 {
-	border:solid #f00 1px;
+	border:solid #f00 0px;
 	background-color:#fff;
 	color:#000;
 }
 
-#loading
-{
-	display:none;
-	background-color:#fff;
-}
+#loading { display:none; }
 
-#item_list div
-{
-	display:inline;
-	padding: 0 0em 0 0;
-}
-
-h1 { font-size: 22px; }
-
-h2 { font-size: 20px; }
-
-h3 { font-size: 18px; }
-
-.main_container
-{	
-	/*margin: 0px auto;*/
-}
 
 .page_title
 {
@@ -50,20 +30,7 @@ h3 { font-size: 18px; }
 	border-bottom: solid #999 1px;
 }
 
-.content
-{
-	border:solid #f00 2px;
-	padding:1em;
-	background-color:#fff;
-}
-
-li:first-child
-{
-	margin: 0.25 0 0.25em 0;
-}
-
-li
-{
-	margin: 0 0 0.25em 0;
-}
+h1 { size:18px; margin:0.25em; padding:0; }
+h2 { size:18px; margin:0.25em; padding:0; }
+h3 { size:18px; margin:0.25em; padding:0; }
 
