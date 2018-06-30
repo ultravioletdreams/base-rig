@@ -10,37 +10,85 @@ class app_response
 	{
 		// Call parent class constructor
 		//parent::__construct();
-		// Flag
+		
+		// Flag response returned
 		$this->response_returned = false;
+		
+		// Session status
+		$this->session_started = false;
+		
+		// Return JSON response only
+		$this->force_json = false;
 
 		// Application title
 		$this->app_title = 'DEFAULT: Application Title';
 
-		// Target data 
-		$this->target_data = array();
-		//$this->target_data['response_info'] = 'App: V0.1 delta';
-		//$this->target_data['target_data'] = false;
-		//$this->target_data['call_local_js'] = false;
-		//$this->target_data['callback_requests'] = false;
-		//$this->target_data['target_data']['debug'] = 'O.K.';
+		// Response data 
+		$this->response_data = array();
+		
+		// Initialise session status
+		if(session_id() == '')
+		{
+			//$this->response_data['app_status'][] = 'Session not started.';
+			$this->session_started = false;
+		}
+		else
+		{
+			//$this->response_data['app_status'][] = 'Session started:' . session_id();
+			$this->session_started = true;
+		}
+	}
+/********************************************************************************************************************************/
+// Set session data
+	function get_s($value_key)
+	{
+		if($this->session_started)
+		{
+			return isset($_SESSION['app_data'][$value_key]) ? $_SESSION['app_data'][$value_key] : false;
+		}
+		else
+		{
+			$this->response_data['app_debug'] = 'Get session var failed: session not started.';
+			return false;
+		}
+	}
+/********************************************************************************************************************************/
+// Get session data
+	function set_s($value_key,$value)
+	{
+		if($this->session_started)
+		{
+			$_SESSION['app_data'][$value_key] = $value;
+		}
+		else
+		{
+			$this->target_data['app_debug'] = 'Set session var failed: session not started.';
+			return false;
+		}
 	}
 /********************************************************************************************************************************/
 // Response data setter
 	function set_response($target_id,$data)
 	{
-		$this->target_data['target_data'][$target_id] = $data;
+		$this->response_data['update_content'][$target_id] = $data;
 	}
 /********************************************************************************************************************************/
 // Response call local JS setter	
 	function set_local_js($target_id,$data)
 	{
-		$this->target_data['call_local_js'][$target_id] = $data;
+		$this->response_data['local_js'][$target_id] = $data;
 	}
 /********************************************************************************************************************************/
 // Send callback request in response
 	function set_callback($target_id,$data)
 	{
-		$this->target_data['callback_requests'][$target_id]= $data;
+		$this->response_data['callback_request'][$target_id]= $data;
+	}
+/********************************************************************************************************************************/
+// Response data setter
+	function set_message($msg_id,$msg_title,$msg_text,$msg_type)
+	{
+		$this->response_data['app_message'][$msg_id] = array($msg_title,$msg_text,$msg_type);
 	}
 /********************************************************************************************************************************/
 // Generate HTML from template
@@ -75,7 +123,7 @@ class app_response
 		// Use built in response data
 		if($response_body === false)
 		{
-			$response_body = $this->target_data;
+			$response_body = $this->response_data;
 		}
 		
 		// Get Accept from request header
@@ -84,7 +132,7 @@ class app_response
 		$accept = explode(',',$accept);
 		
 		// Check the first element for json
-		if($accept[0] == 'application/json' || $force_json)
+		if($accept[0] == 'application/json' || $this->force_json || $force_json)
 		{
 			$this->return_json($response_body);	
 		}
@@ -115,6 +163,7 @@ class app_response
 	function default_action($action_name)
 	{
 		$this->set_response('debug','Unknown action: ' . $action_name);
+		$this->response_data['error_info'] = array('Unknown action!','The action requested is not defined server side: ' .  $action_name,'error');
 	}
 /********************************************************************************************************************************/
 // END CLASS

@@ -54,9 +54,44 @@ class app_test_db extends app_db
 	}
 //********************************************************************************************************************************		
 // SELECT - Select all entries in test table
-	function select_all($sensor_table_name='app_obj_types')
+	function select_all($sort_order,$sort_by)
 	{
-		$query_string = "SELECT * FROM $this->table_name ORDER BY type_name DESC LIMIT 100";
+		switch($sort_order)
+		{
+			case '0':
+				$sort_order = 'ASC';
+			break;
+			
+			case '1':
+				$sort_order = 'DESC';
+			break;
+			
+			default:
+				$sort_order = 'ASC';
+			break;
+		}
+		
+		switch($sort_by)
+		{
+			case '0':
+				$sort_by = 'id';
+			break;
+			
+			case '1':
+				$sort_by = 'type_id';
+			break;
+			
+			case '2':
+				$sort_by = 'type_name';
+			break;
+			
+			default:
+				$sort_by = 'id';
+			break;
+		}
+		
+		
+		$query_string = "SELECT * FROM $this->table_name ORDER BY " . $sort_by . " " . $sort_order . ";";
 		return $this->db_query($query_string);
 	}
 //********************************************************************************************************************************		

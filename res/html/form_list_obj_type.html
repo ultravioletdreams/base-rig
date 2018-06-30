@@ -10,7 +10,7 @@ if(count($result_set) > 0) { ?>
 		<form id="form_<?php echo $result_row['id'] ?>" data-parsley-trigger="focusin focusout" >
 		<input type="hidden" name="ax" value="update_item" >
 		<input type="hidden" name="idx" value="<?php echo $result_row['id'] ?>" >
-		<input type="hidden" name="id" value="<?php echo $result_row['id'] ?>" >
+		<input type="text" name="id" value="<?php echo $result_row['id'] ?>" >
 		<div>
 		<label for="type_id" >Type Id</label>
 		<input type="text" id="type_id" name="type_id" data-restrict="numeric" value="<?php echo $result_row['type_id'] ?>" data-parsley-required data-parsley-type="integer" >
@@ -20,7 +20,7 @@ if(count($result_set) > 0) { ?>
 		</div>
 		<input type="submit" value="Update" >
 		</form>
-		<div style="width:100px;display:inline;"><button id="delete_item" class="action_btn" data-idx="<?php echo $result_row['id'] ?>">Delete</button></div>
+		<div style="width:100px;display:inline;"><button id="request_delete" class="action_btn" data-idx="<?php echo $result_row['id'] ?>">Delete</button></div>
 	</div>
 
 <?php } ?>

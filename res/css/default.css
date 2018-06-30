@@ -11,6 +11,13 @@ body
 	color:#000;
 }
 
+#status
+{
+	border:solid #00f 1px;
+	min-height:100px;
+	margin:0.25em;
+}
+
 #loading { display:none; }
 
 

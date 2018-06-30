@@ -4,16 +4,21 @@
 		<!-- JQuery -->
 		<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 		
-		<!-- JS Startup - Initailises js -->
+		<!-- App JS -->
 		<script src="./res/js/app.js"></script>
 		<script src="./res/js/app_form.js"></script>
+		<!-- Startup -->
 		<script src="./res/js/app_startup.js"></script>
+		<!-- Parsley -->
 		<script src="./res/js/parsley.js"></script>
+		<!-- Sweetalert -->
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		
 		<!-- Default Stylesheet for minimum styling -->
 		<link rel="stylesheet" type="text/css" href="./res/css/normalize.css">
 		<link rel="stylesheet" type="text/css" href="./res/css/default.css">
 		<link rel="stylesheet" type="text/css" href="./res/css/app_forms.css">
+		<!-- Parsley -->
 		<link rel="stylesheet" type="text/css" href="./res/css/parsley.css">
 		
 		<!-- Title -->
@@ -33,8 +38,16 @@
 			
 			<div class="menu_bar">
 				<button id="refresh_form" class="action_btn">Refresh View</button>
-				<button id="do_alpha" class="action_btn">Alpha</button>
-				<button id="do_beta" class="action_btn">Beta</button>
+				<button id="new_form" data-action-handler="app_dynamic_form" class="action_btn">DEV Form</button>
+				<button id="do_alpha"     class="action_btn">Alpha</button>
+				<button id="do_beta"      class="action_btn">Beta</button>
+				<button id="add_a"    data-action-handler="app_test" class="action_btn">Add Targets A</button>
+				<button id="add_b"    data-action-handler="app_test" class="action_btn">Add Targets B</button>
+				<button id="rem_a"    data-action-handler="app_test" class="action_btn">Remove Target A</button>
+				<button id="rem_b"    data-action-handler="app_test" class="action_btn">Remove Target B</button>
+				<button id="fill_a"   data-action-handler="app_test" class="action_btn">Fill Target A</button>
+				<button id="fill_b"   data-action-handler="app_test" class="action_btn">Fill Target B</button>
+				
 			</div>
 			
 			<!-- PROGRESSS INDICATOR -->
@@ -43,6 +56,9 @@
 			
 			<!-- *** Testing *** -->
 			<div id="debug"></div>
+			
+			<!-- *** Status Messages *** -->
+			<div id="status"></div>
 			
 			<!-- START: content -->
 			<div class="app_form" id="input_form"></div>

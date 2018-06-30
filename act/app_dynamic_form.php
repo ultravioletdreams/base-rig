@@ -1,40 +1,44 @@
 <?php
 /********************************************************************************************************************************/
-// App switcher
+// App default
 /********************************************************************************************************************************/
-class app
+class app_dynamic_form extends app_response
 {
 /********************************************************************************************************************************/
 // Constructor
 	function __construct()
 	{
-		// Use app_action class template as default app if one is not defined.
-		$this->current_app = defined('APP_DEFAULT_APP') ? APP_DEFAULT_APP : 'app_action';
+		// Call parent class constructor
+		parent::__construct();
 		
-		// Start PHP session
-		$start_session = defined('APP_SESSION_START') ? APP_SESSION_START : false;
-		if($start_session)
-		{
-			session_start();
-		}
-	}
-	
-/********************************************************************************************************************************/
-// Execute
-	function execute()
-	{
-		// Check for requested app
-		$app_name = isset($_REQUEST['appx']) ? $_REQUEST['appx'] : $this->current_app;
-		
-		// Check we have a registered application by that name
-		// TODO ... 
-		
-		// Pass off execution to requested application
-		$app = new $app_name();
-		$app->execute();
-		if($app->response_returned === false) $app->return_response();
+		// Force JSON response
+		$this->force_json = true;
 	}
 
+/********************************************************************************************************************************/
+// Execute - Perform requested action
+	function execute()
+	{	
+		// Check for requested action
+		$app_action = isset($_REQUEST['ax']) ? $_REQUEST['ax'] : 'startup_view';
+		
+		if(method_exists($this,$app_action))
+		{
+			// Call requested action
+			$this->$app_action();
+		}
+		else
+		{
+			$this->default_action($app_action);
+		}
+	}	
+
+/********************************************************************************************************************************/
+// ACTION: UPDATE - 
+	function new_form()
+	{
+			$this->target_data['error_info'] = array('New Form','Testing...','success');
+	}
 /********************************************************************************************************************************/
 // END CLASS
 /********************************************************************************************************************************/

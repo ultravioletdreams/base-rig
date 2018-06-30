@@ -1,20 +1,21 @@
 /*--------------------------------------------------------------------------------------------------------------------------------*/
 // Attach app form submit handler to forms
 /*--------------------------------------------------------------------------------------------------------------------------------*/
+var form_debug = false;
 
 function attach_form_submit()
 {
-	console.log('FUNCTION: attach_form_submit');
+	if(form_debug != false) console.log('FUNCTION: attach_form_submit');
 	
 	// Get all forms on page and list their names
 	var myforms = $('form');
 	$.each(myforms, function(key,value)
 	{
-		console.log('FORM:' + key + ' : ' + $(value).attr('id'));
+		if(form_debug != false) console.log('FORM:' + key + ' : ' + $(value).attr('id'));
 		$(value).parsley();
 		$(value).parsley().on('form:submit', function() {
-			console.log('Form submit attempted.');
-			console.log(this.$element.attr('id'));
+			if(form_debug != false) console.log('Form submit attempted.');
+			if(form_debug != false) console.log(this.$element.attr('id'));
 			do_submit(this);
 			// Prevent default form submit
 			return false;
@@ -25,7 +26,7 @@ function attach_form_submit()
 // Isolate the subit function
 function do_submit(me)
 {
-	if(debug_mode > 1) console.log('DO FORM SUBMIT ->');
+	if(form_debug != false) console.log('DO FORM SUBMIT ->');
 		// Get id of form that was submitted.
 		var form_id = me.$element.attr("id");
 		console.log('DO:' + form_id);
