@@ -10,6 +10,7 @@ function x_app()
 	this.request_id = false;
 	this.form_id = false;
 	this.reset_form = false;
+	this.action_handler = false;
 	
 	// Request parameter name - the POST/GET variable name that the action handler id will be looked for server side.
 	this.action_handler_param_id = 'appx';
@@ -21,7 +22,7 @@ function x_app()
 	this.request_url = 'index.php';
 	
 	// Send an action request and handle the response.
-	this.ajax_req = function(action,action_params,action_handler)
+	this.ajax_req = function(action,action_params,overide_action_handler)
 	{
 		// ***
 		if(me.debug_mode >= 1) console.log('%c SEND REQUEST: ' + action,'background: #DFF0D8; color:#468847;');
@@ -30,11 +31,15 @@ function x_app()
 		var request_url = me.request_url + '?' + me.action_param_id + '=' + action;
 		
 		// *** Alter request destination action handler
-		if(typeof action_handler !== 'undefined')
-		if(action_handler !== false)
+		//if(typeof action_handler !== 'undefined')
+		if(typeof overide_action_handler !== 'undefined' && overide_action_handler !== false)
 		{
 			// Append action handler to request
-			request_url += '&appx=' + action_handler;
+			request_url += '&appx=' + overide_action_handler;
+		}
+		else
+		{
+			request_url += '&appx=' + me.action_handler;
 		}
 		
 		// Save action as request id
@@ -76,14 +81,6 @@ function x_app()
 		
 		// Running callback requests
 		me.callback_requests(data);
-		
-		// Debug alerts
-		if(typeof data['error_info'] != 'undefined')
-		{
-			console.log('Error info: ' + data['error_info'][0] + ' : ' + data['error_info'][1] + ' : ' + data['error_info'][2]);
-			swal(data['error_info'][0], data['error_info'][1], data['error_info'][2]);
-			//swal("Good job!", "You clicked the button!", "success");
-		}
 	}
 	
 	// Form submit success handler
@@ -109,19 +106,39 @@ function x_app()
 	// Messages
 	this.app_message = function(data)
 	{
-		if(me.debug_mode >= 1) console.log('%c' + me.request_id + ': APP MESSAGE ','background: #F2DEDE; color:#B94A48;');
+		//
+		var p1 = Promise.resolve(true);
 		if(typeof data['app_message'] != 'undefined')
 		{
-			$.each(data['app_message'], function (key,value)
+			me.app_messages = data['app_message'];
+			me.message_index = 0;
+			console.log('# MSGS:' + Object.keys(me.app_messages).length);
+
+			for(i=0;i<Object.keys(me.app_messages).length;i++)
 			{
-				/*if(me.debug_mode >= 1)*/ console.log('%c app_message: ' + key + ' : ' + value,'background: #F2DEDE; color:#B94A48;');
-				let t1 = swal(value[0],value[1],value[2]);
-			});
+				p1 = p1.then((value) => { return me.show_msg(value); });
+			}
+		}
+	}
+
+	// Show message
+	this.show_msg = function(value)
+	{
+		var return_var = false;
+
+		if(value === true)
+		{
+			console.log('COUNT:' + me.message_index);
+			console.log(me.app_messages[me.message_index][0]);
+			return_var =  swal(me.app_messages[me.message_index][0],me.app_messages[me.message_index][1],me.app_messages[me.message_index][2]);
+			me.message_index += 1;
 		}
 		else
 		{
-			console.log('app_message - NOT DEFINED');	
+			return_var = false;
 		}
+	
+		return return_var;
 	}
 
 	// Update content elements by id

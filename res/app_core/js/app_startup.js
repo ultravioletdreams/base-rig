@@ -5,7 +5,7 @@
 // Run startup when document is ready
 $(document).ready(function(){ startup(); });
 
-var local_debug = false;
+var local_debug = true;
 
 // Startup function
 function startup()
@@ -21,6 +21,7 @@ function startup()
 function send_action(action_id,action_params,action_handler)
 {
 	var xreq = new x_app();
+	xreq.action_handler = "app_master_tables";
 	xreq.ajax_req(action_id,action_params,action_handler);
 }
 

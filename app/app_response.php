@@ -86,9 +86,9 @@ class app_response
 	}
 /********************************************************************************************************************************/
 // Response data setter
-	function set_message($msg_id,$msg_title,$msg_text,$msg_type)
+	function set_message($msg_title,$msg_text,$msg_type)
 	{
-		$this->response_data['app_message'][$msg_id] = array($msg_title,$msg_text,$msg_type);
+		$this->response_data['app_message'][] = array($msg_title,$msg_text,$msg_type);
 	}
 /********************************************************************************************************************************/
 // Generate HTML from template
@@ -162,8 +162,7 @@ class app_response
 // DEFAULT: Default - Unknown action requested.
 	function default_action($action_name)
 	{
-		$this->set_response('debug','Unknown action: ' . $action_name);
-		$this->response_data['error_info'] = array('Unknown action!','The action requested is not defined server side: ' .  $action_name,'error');
+		$this->set_message('Unknown Action','An unknown action was requested: ' . $action_name,'warning');
 	}
 /********************************************************************************************************************************/
 // END CLASS

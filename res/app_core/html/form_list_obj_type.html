@@ -7,7 +7,7 @@ if(count($result_set) > 0) { ?>
 <?php foreach($action_data['result_set'] as $result_row) { ?>
 
 	<div class="form_list_item" >	
-		<form id="form_<?php echo $result_row['id'] ?>" data-parsley-trigger="focusin focusout" >
+		<form id="form_list_<?php echo $result_row['id'] ?>" data-parsley-trigger="focusin focusout" >
 		<input type="hidden" name="ax" value="update_item" >
 		<input type="hidden" name="idx" value="<?php echo $result_row['id'] ?>" >
 		<input type="text" name="id" value="<?php echo $result_row['id'] ?>" >
@@ -16,7 +16,7 @@ if(count($result_set) > 0) { ?>
 		<input type="text" id="type_id" name="type_id" data-restrict="numeric" value="<?php echo $result_row['type_id'] ?>" data-parsley-required data-parsley-type="integer" >
 		</div>
 		<div>
-		<label for="type_name" >Type Name</label>	<input type="text" id="type_name" name="type_name" value="<?php echo $result_row['type_name'] ?>" data-parsley-required data-parsley-minlength="4" >
+		<label for="type_name" >Type Name</label>	<input type="text" id="type_name" name="type_name" value="<?php echo $result_row['type_name'] ?>" data-xxxparsley-required data-xxxparsley-minlength="4" >
 		</div>
 		<input type="submit" value="Update" >
 		</form>
@@ -37,6 +37,6 @@ function get_form_definition()
 
 	echo $input_def_json . "\n";
 
-	$input_def = json_decode($input_def_json,true);
+	$input_def = json_decode($input_def_json,true); 
 }
 ?>

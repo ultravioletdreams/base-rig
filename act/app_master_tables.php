@@ -12,7 +12,7 @@ class app_master_tables extends app_response
 		parent::__construct();
 		
 		// Set app HTML template path
-		$this->html_template_path = './res/html/master_tables.html';
+		$this->html_template_path = './res/app_core/html/master_tables.html';
 		// Set app title
 		$this->app_title = 'Master Tables V1.0 Beta';
 	}
@@ -59,8 +59,9 @@ class app_master_tables extends app_response
 	{
 		$this->input_form();
 		$this->update_form();
-		//$this->set_message('test_1','Error!','An error happened!','error');
-		//$this->set_message('test_2','Just Kidding','Everythings O.K.','success');
+		$this->set_message('Error!','An error happened!','error');
+		$this->set_message('Just Kidding','Everythings O.K.','success');
+		//$this->set_message('Just Kidding','Everythings O.K.','success');
 	}
 	
 /********************************************************************************************************************************/
@@ -73,12 +74,12 @@ class app_master_tables extends app_response
 		if($this->get_s('alpha_mode'))
 		{
 			$this->target_data['error_info'] = array('Alpha','Alpha mode activated.','success');
-			$this->set_message('alpha_1','Alpha','Alpha mode activated.','success');
+			$this->set_message('Alpha','Alpha mode activated.','success');
 		}
 		else
 		{
 			$this->target_data['error_info'] = array('Alpha','Alpha mode de-activated.','warning');
-			$this->set_message('test_1','Alpha','Alpha mode de-activated.','warning');
+			$this->set_message('Alpha','Alpha mode de-activated.','warning');
 		}
 	}
 /********************************************************************************************************************************/
@@ -86,10 +87,10 @@ class app_master_tables extends app_response
 	function input_form()
 	{
 		// Send display template for input form
-		$content = $this->template_html('./res/html/form_input_obj_type.html',false);
+		$content = $this->template_html('./res/app_core/html/form_input_obj_type.html',false);
 		$page_data['sort_order'] = $this->get_s('sort_order');
 		$page_data['sort_by'] = $this->get_s('sort_by');
-		$content .= "\n" . $this->template_html('./res/html/form_sort_order.html',$page_data);
+		$content .= "\n" . $this->template_html('./res/app_core/html/form_sort_order.html',$page_data);
 		$this->set_response('input_form',$content);
 		// Call local JS to attach required request handler to input button
 		$this->set_local_js('attach_form_submit',false);
@@ -109,7 +110,7 @@ class app_master_tables extends app_response
 		$result = $dbx->select_all($sort_order,$sort_by);
 		$page_data['result_set'] = $result;
 		// Send display template for update form rendered with table data
-		$content = $this->template_html('./res/html/form_list_obj_type.html',$page_data);
+		$content = $this->template_html('./res/app_core/html/form_list_obj_type.html',$page_data);
 		$this->set_response('update_form',$content);
 		// Call local JS to attach required request handler to input button
 		$this->set_local_js('attach_form_submit',false);

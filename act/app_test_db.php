@@ -92,6 +92,7 @@ class app_test_db extends app_db
 		
 		
 		$query_string = "SELECT * FROM $this->table_name ORDER BY " . $sort_by . " " . $sort_order . ";";
+		//$query_string = "SELECT * FROM $this->table_name ORDER BY type_name " . $sort_order . ";";
 		return $this->db_query($query_string);
 	}
 //********************************************************************************************************************************		
