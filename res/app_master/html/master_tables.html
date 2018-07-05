@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<!-- REQUIRED: JQuery -->
+		<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+		
+		<!-- CORE: App JS -->
+		<script src="./res/app_core/js/app.js"></script>
+		<script src="./res/app_core/js/app_form.js"></script>
+		
+		<!-- APP Startup -->
+		<script src="./res/app_master/js/app_startup.js"></script>
+		
+		<!-- App specific JS -->
+		<script src="./res/app_master/js/master_tables.js"></script>
+		
+		<!-- Parsley -->
+		<script src="./res/app_core/js/parsley.js"></script>
+		
+		<!-- Sweetalert -->
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
+		<!-- Default Stylesheet for minimum styling -->
+		<link rel="stylesheet" type="text/css" href="./res/app_core/css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="./res/app_master/css/default.css">
+		<link rel="stylesheet" type="text/css" href="./res/app_master/css/app_forms.css">
+		<!-- Parsley -->
+		<link rel="stylesheet" type="text/css" href="./res/app_core/css/parsley.css">
+		
+		<!-- Title -->
+		<title><?php echo $action_data['app_title']; ?></title>
+	</head>
+
+	<body>
+	
+		<!-- START: main container -->
+		<div class="main_container">
+		
+			<!-- Page Header -->	
+			<div class="page_header">
+				<!-- Page Title -->
+				<div class="page_title"><?php echo $action_data['app_title']; ?></div>
+			</div>
+			
+			<!-- Main Menu -->	
+			<div class="menu_bar">
+				<button class="action_btn" data-app-handler="app_master_tables" data-app-action="refresh_form" >Refresh View </button>
+				<button class="action_btn" data-app-handler="poi_manager"       data-app-action="poi_form"     >POI View     </button>
+			</div> 
+			
+			<!-- PROGRESSS INDICATOR -->
+			<div id="loading" class="loading"><img src="./res/app_core/img/busy.gif" ></div>
+			
+			<!-- START: Main Content -->
+			<div id="main_content">
+				
+				<!-- START: content -->
+					<div class="app_form" id="update_form"></div>
+				<!-- END: content -->
+				
+			</div>
+			<!-- START: Main Content -->
+			
+		</div>
+		<!-- END: main container -->
+	</body>
+</html>

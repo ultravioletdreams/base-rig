@@ -2,40 +2,29 @@
 //********************************************************************************************************************************
 // Queries for test DB
 //********************************************************************************************************************************
-class app_test_db extends app_db
+class poi_manager_db extends app_db
 {
 //********************************************************************************************************************************	
 // Constructor
 	function __construct()
 	{
-		// Call parent constructor
-		parent::__construct();
+		// DB connection string
+		$db_string = 'host=localhost port=5432 dbname=poi_manager user=poi_user password=pretty-please-no-thanks';
+		// Call parent constructor with db connect string
+		parent::__construct($db_string);
+		
 		// Set table name that queries will operate on
-		$this->table_name = 'app_obj_types';
-	}
-//********************************************************************************************************************************		
-// Create entry into test table
-	function create_test_entry($data,$server_stamp)
-	{	
-		$query_string = "INSERT INTO test "
-		              . "(data,teststamp) "
-                      . "VALUES ("
-					  . "'$data',"
-					  . "'$server_stamp'"
-					  . ") RETURNING id;";
-
-		$result = $this->db_query($query_string);
-		return $result[0]['id'];
+		$this->table_name = 'poi';
 	}
 //********************************************************************************************************************************		
 // Create entry into MASTER: app_obj_types
-	function create_master_entry($type_id,$type_name)
+	function insert_item($lat,$lon)
 	{	
-		$query_string = "INSERT INTO app_obj_types "
-		              . "(type_id,type_name) "
+		$query_string = "INSERT INTO poi "
+		              . "(lat,lon) "
                       . "VALUES ("
-					  . "'$type_id',"
-					  . "'$type_name'"
+					  . "'$lat',"
+					  . "'$lon'"
 					  . ") RETURNING id;";
 
 		$result = $this->db_query($query_string);
@@ -46,7 +35,7 @@ class app_test_db extends app_db
 // reset_entries
 	function reset_entries()
 	{	
-		$query_string = "TRUNCATE TABLE test RESTART IDENTITY;";
+		$query_string = "TRUNCATE TABLE poi RESTART IDENTITY;";
 
 		$result = $this->db_query($query_string);
 		return $result;
@@ -54,59 +43,23 @@ class app_test_db extends app_db
 	}
 //********************************************************************************************************************************		
 // SELECT - Select all entries in test table
-	function select_all($sort_order,$sort_by)
-	{
-		switch($sort_order)
-		{
-			case '0':
-				$sort_order = 'ASC';
-			break;
-			
-			case '1':
-				$sort_order = 'DESC';
-			break;
-			
-			default:
-				$sort_order = 'ASC';
-			break;
-		}
-		
-		switch($sort_by)
-		{
-			case '0':
-				$sort_by = 'id';
-			break;
-			
-			case '1':
-				$sort_by = 'type_id';
-			break;
-			
-			case '2':
-				$sort_by = 'type_name';
-			break;
-			
-			default:
-				$sort_by = 'id';
-			break;
-		}
-		
-		
-		$query_string = "SELECT * FROM $this->table_name ORDER BY " . $sort_by . " " . $sort_order . ";";
-		//$query_string = "SELECT * FROM $this->table_name ORDER BY type_name " . $sort_order . ";";
+	function select_all($sort_order=0,$sort_by=0)
+	{		
+		$query_string = "SELECT * FROM poi ORDER BY point_id ASC;";
 		return $this->db_query($query_string);
 	}
 //********************************************************************************************************************************		
 // UPDATE - Update single entry identified by id
 	function update_entry($entry_values)
 	{
-		$query_string = "UPDATE $this->table_name SET type_id = '" . $entry_values[1]  . "', type_name = '" . $entry_values[2] . "' WHERE id = '" . $entry_values[0] . "' RETURNING id;";
+		$query_string = "UPDATE poi SET lat = '" . $entry_values[1]  . "', lon = '" . $entry_values[2] . "' WHERE point_id = '" . $entry_values[0] . "' RETURNING point_id;";
 		return $this->db_query($query_string);
 	}
 //********************************************************************************************************************************		
 // DELETE - Delete single entry identified by id
 	function delete_entry($entry_id)
 	{
-		$query_string = "DELETE FROM $this->table_name WHERE id = '" . $entry_id . "' RETURNING id;";
+		$query_string = "DELETE FROM poi WHERE point_id = '" . $entry_id . "' RETURNING point_id;";
 		return $this->db_query($query_string);
 	}
 //********************************************************************************************************************************

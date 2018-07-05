@@ -6,12 +6,11 @@ class app_db
 {
 //********************************************************************************************************************************	
 // Constructor
-	function __construct()
+	function __construct($db_connection_string)
 	{
-		// echo 'Constructor!';
 		// Postgre SQL 9.4 connection string
 		// E.G. "host=localhost port=5432 dbname=logger user=pgadmin password=pgadmin123456"
-		$this->db_string = 'host=localhost port=5432 dbname=nutshell-dev user=nutshell-dev password=one-two-alpha-beta';
+		$this->db_string = $db_connection_string;
 		$this->error_msg = false;
 	}
 //********************************************************************************************************************************		

@@ -12,7 +12,7 @@ class app_master_tables extends app_response
 		parent::__construct();
 		
 		// Set app HTML template path
-		$this->html_template_path = './res/app_core/html/master_tables.html';
+		$this->html_template_path = './res/app_master/html/master_tables.html';
 		// Set app title
 		$this->app_title = 'Master Tables V1.0 Beta';
 	}
@@ -47,7 +47,7 @@ class app_master_tables extends app_response
 	function startup_js()
 	{
 		// Callbacks to request app content
-		$this->set_callback('input_form',false);
+		//$this->set_callback('input_form',false);
 		$this->set_callback('update_form',false);
 		// Call local JS to attach app handler to action buttons
 		$this->set_local_js('attach_actions',false);
@@ -57,40 +57,18 @@ class app_master_tables extends app_response
 // ALIAS: $this->update_form()
 	function refresh_form()
 	{
-		$this->input_form();
+		//$this->input_form();
 		$this->update_form();
-		$this->set_message('Error!','An error happened!','error');
-		$this->set_message('Just Kidding','Everythings O.K.','success');
-		//$this->set_message('Just Kidding','Everythings O.K.','success');
-	}
-	
-/********************************************************************************************************************************/
-// Test alpha
-	function do_alpha()
-	{
-		// error success info testing
-		$alpha_mode = $this->get_s('alpha_mode');
-		$this->set_s('alpha_mode',!$alpha_mode);
-		if($this->get_s('alpha_mode'))
-		{
-			$this->target_data['error_info'] = array('Alpha','Alpha mode activated.','success');
-			$this->set_message('Alpha','Alpha mode activated.','success');
-		}
-		else
-		{
-			$this->target_data['error_info'] = array('Alpha','Alpha mode de-activated.','warning');
-			$this->set_message('Alpha','Alpha mode de-activated.','warning');
-		}
 	}
 /********************************************************************************************************************************/
 // VIEW: Input form - for creating new row / item into DB.
 	function input_form()
 	{
 		// Send display template for input form
-		$content = $this->template_html('./res/app_core/html/form_input_obj_type.html',false);
+		$content = $this->template_html('./res/app_master/html/form_input_obj_type.html',false);
 		$page_data['sort_order'] = $this->get_s('sort_order');
 		$page_data['sort_by'] = $this->get_s('sort_by');
-		$content .= "\n" . $this->template_html('./res/app_core/html/form_sort_order.html',$page_data);
+		$content .= "\n" . $this->template_html('./res/app_master/html/form_sort_order.html',$page_data);
 		$this->set_response('input_form',$content);
 		// Call local JS to attach required request handler to input button
 		$this->set_local_js('attach_form_submit',false);
@@ -106,11 +84,13 @@ class app_master_tables extends app_response
 		$sort_by = $this->get_s('sort_by');
 		//$this->set_response('status','SORT ORDER:' . $sort_order);
 		// Generate template data - list table contents
-		$dbx = new app_test_db();
+		$dbx = new master_tables_db();
 		$result = $dbx->select_all($sort_order,$sort_by);
 		$page_data['result_set'] = $result;
+		$page_data['sort_order'] = $this->get_s('sort_order');
+		$page_data['sort_by'] = $this->get_s('sort_by');
 		// Send display template for update form rendered with table data
-		$content = $this->template_html('./res/app_core/html/form_list_obj_type.html',$page_data);
+		$content = $this->template_html('./res/app_master/html/result_list.html',$page_data);
 		$this->set_response('update_form',$content);
 		// Call local JS to attach required request handler to input button
 		$this->set_local_js('attach_form_submit',false);
@@ -126,7 +106,6 @@ class app_master_tables extends app_response
 		$this->set_s('sort_order',$sort_order);
 		$this->set_s('sort_by',$sort_by);
 		$this->set_response('status','Sort order:' . $this->get_s('sort_order') . ' : ' . $sort_order . ' Sort by:' . $sort_by);
-		$this->input_form();
 		$this->update_form();
 	}
 	
@@ -135,7 +114,7 @@ class app_master_tables extends app_response
 	function new_item_1()
 	{
 		// CREATE
-		$tmp_db = new app_test_db();
+		$tmp_db = new master_tables_db();
 		$val_1 = isset($_REQUEST['type_id']) ? $_REQUEST['type_id'] : false;
 		$val_2 = isset($_REQUEST['type_name']) ? $_REQUEST['type_name'] : false;
 		if( $val_1 && $val_2)
@@ -167,7 +146,7 @@ class app_master_tables extends app_response
 		$entry_values[1] = $_REQUEST['type_id'];
 		$entry_values[2] = $_REQUEST['type_name'];
 		
-		$tmp_db = new app_test_db();
+		$tmp_db = new master_tables_db();
 		$result = $tmp_db->update_entry($entry_values);
 		
 		if(count($result) <= 0)
@@ -185,29 +164,6 @@ class app_master_tables extends app_response
 		$this->set_local_js('send_action','update_form');
 	}
 /********************************************************************************************************************************/
-// ACTION: REQUEST DELETE - 
-	function request_delete()
-	{
-		// Get request payload / decode to array
-		$entityBody = file_get_contents('php://input');
-		$tmp = json_decode($entityBody,true);
-		
-		// Save requested deletion in session
-		$this->set_s('requested_id',$tmp['idx']);
-		
-		// Ask for confirmation
-		$response  = '<h2>Confirm deletion of: ' . $this->get_s('requested_id') . ' ?</h2>';
-		$response .= '<button id="delete_item" class="action_btn" data-idx="' . $tmp['idx'] . '">Delete</button>';
-		$response .= '<button id="cancel_delete" class="action_btn">Cancel</button>';
-		$this->set_response('status',$response);
-		$this->set_local_js('attach_actions',false);
-	}
-	
-	function cancel_delete()
-	{
-		$this->set_response('status','');
-	}
-/********************************************************************************************************************************/
 // ACTION: DELETE - 
 	function delete_item()
 	{
@@ -215,17 +171,19 @@ class app_master_tables extends app_response
 		$entityBody = file_get_contents('php://input');
 		$tmp = json_decode($entityBody,true);
 		// QUERY - DELETE
-		$tmp_db = new app_test_db();
+		$tmp_db = new master_tables_db();
 		$result = $tmp_db->delete_entry($tmp['idx']);
 		if(count($result) <= 0)
 		{
 			$result = 'Nothing Deleted!';
 			$this->set_response('debug',$result);
+			$this->set_message('Nothing Deleted!','The item requested was not deleted!','error');
 		}
 		else
 		{
 		// RESULT
 		$this->set_response('debug','Deleted item number: ' . $result[0]['id']);
+		$this->set_message('Item Deleted','Deleted item number: ' . $result[0]['id'],'success');
 		}
 		
 		// Call refresh content form to see result of delete.

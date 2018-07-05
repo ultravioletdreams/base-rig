@@ -2,7 +2,7 @@
 /********************************************************************************************************************************/
 // App default
 /********************************************************************************************************************************/
-class app_dynamic_form extends app_response
+class poi_manager extends app_response
 {
 /********************************************************************************************************************************/
 // Constructor
@@ -32,22 +32,21 @@ class app_dynamic_form extends app_response
 			$this->default_action($app_action);
 		}
 	}	
-
 /********************************************************************************************************************************/
-// ACTION: UPDATE Form
-	function test_swal()
+// ACTION VIEW: SELECT - from poi table	
+	function poi_form()
 	{
-		$this->set_local_js('test_swal',false);
-	}
-/********************************************************************************************************************************/
-// ACTION: UPDATE Form
-	function new_form()
-	{
-		$db = new master_tables_db();
-		$template_data['result_set'] = $db->select_all();
-		// Generate result list HTML 
-		$tmp = $this->template_html('./res/app_master/html/result_list.html',$template_data);
-		$this->set_response('update_form',$tmp);
+		// NEW: sort order
+		//$sort_order = $this->get_s('sort_order');
+		//$sort_by = $this->get_s('sort_by');
+		//$this->set_response('status','SORT ORDER:' . $sort_order);
+		// Generate template data - list table contents
+		$dbx = new poi_manager_db();
+		$result = $dbx->select_all();
+		$page_data['result_set'] = $result;
+		// Send display template for update form rendered with table data
+		$content = $this->template_html('./res/app_master/html/poi_result_list.html',$page_data);
+		$this->set_response('update_form',$content);
 		// Call local JS to attach required request handler to input button
 		$this->set_local_js('attach_form_submit',false);
 		// Call local JS to attach action handlers to buttons

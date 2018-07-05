@@ -1,0 +1,123 @@
+<!-- BEGIN: Form Input -->
+<div id="form-input" class="form-input">
+	<p>Object Types - Create new.</p>
+	<form id="form_1" action="#" method="post" data-parsley-trigger="focusin focusout">
+	
+		<!-- Hidden Inputs -->
+		<input type="hidden" id="ax" name="ax" value="new_item_1" >
+		
+		<!-- Input 1 -->
+		<div>	
+			<label for="type_id">Type ID</label>   
+			<input type="text" id="type_id" name="type_id" value="" tabindex="1" data-parsley-required data-parsley-type="integer" >
+		</div>
+		
+		<!-- Input 2 -->
+		<div>
+			<label for="type_name">Type Name</label>
+			<input type="text" id="type_name" name="type_name" value="" tabindex="2" data-parsley-required data-parsley-minlength="4" >
+		</div>
+		
+		<!-- Submit Button -->
+		<div>
+			<input type="submit" value="Enter" >
+		</div>
+	
+	</form>
+	
+</div>
+<!-- END: Form Input -->
+
+<h2>TABLE: poi</h2>
+<?php
+
+$form_def = array();
+$form_def['inputs'][] = array('label' => false,       'type' => 'hidden', 'name' => 'ax',        'value_type' => 'static', 'value' => 'update_item',  'data-x' => 'null');
+$form_def['inputs'][] = array('label' => false,       'type' => 'hidden', 'name' => 'appx',      'value_type' => 'static', 'value' => 'poi_manager',  'data-x' => 'null');
+$form_def['inputs'][] = array('label' => false,       'type' => 'hidden', 'name' => 'idx',       'value_type' => 'dynamic', 'value' => 'point_id',           'data-x' => 'null');
+//
+$form_def['inputs'][] = array('label' => 'ID',        'type' => 'text', 'name' => 'point_id',        'value_type' => 'dynamic', 'value' => 'point_id',           'data-x' => 'null');
+$form_def['inputs'][] = array('label' => 'LATITUDE',  'type' => 'text', 'name' => 'lat',   'value_type' => 'dynamic', 'value' => 'lat',      'data-x' => 'data-parsley-required data-parsley-type="integer"');
+$form_def['inputs'][] = array('label' => 'LONGITUDE', 'type' => 'text', 'name' => 'lon',   'value_type' => 'dynamic', 'value' => 'lon',        'data-x' => 'data-parsley-required data-parsley-type="integer"');
+
+foreach($action_data['result_set'] as $index => $result)
+{
+	$form_id = 'resultListItem-' . $index;
+	
+	echo '<div class="form_list_item">';
+	echo '<form id="' . $form_id . '" data-parsley-trigger="focusin focusout">';
+	
+	foreach($form_def['inputs'] as $key => $input_def)
+	{
+		do_input($key,$input_def,$result);
+	} // Row
+	
+	echo '<input type="submit" value="Update">';
+	echo '</form>';
+	echo '<div style="width:100px;display:inline;"><button id="request_delete" class="local_action_btn" data-idx="' . $result['point_id'] . '">Delete</button></div>';
+	echo '</div>';
+	
+} // List 
+
+
+function do_input($input_index,$input_def,$input_data)
+{
+	if( $input_def['value_type'] == 'static' )
+	{
+		$tmp_input = $input_def['value'];
+	}
+	else
+	{
+		$tmp_input = $input_data[$input_def['value']];
+	}
+	
+	echo ($input_def['type'] != 'hidden') ? '<div class="" >' : '';
+	echo ($input_def['label'] === false) ? '' : '<label>' . $input_def['label'] . '</label>';
+	echo '<input type="' . $input_def['type'] . '" name="' . $input_def['name'] . '" value="' . $tmp_input . '" ' . $input_def['data-x'] . ' >';
+	echo ($input_def['type'] != 'hidden') ? '</div>' : '';
+}
+
+
+?>
+
+
+
+
+<?php 
+$result_set = array();//isset($action_data['result_set']) ? $action_data['result_set'] : array();
+if(count($result_set) > 0) { ?>
+<?php foreach($action_data['result_set'] as $result_row) { ?>
+
+	<div class="form_list_item" >	
+		<form id="form_list_<?php echo $result_row['id'] ?>" data-parsley-trigger="focusin focusout" >
+		<input type="hidden" name="ax" value="update_item" >
+		<input type="hidden" name="idx" value="<?php echo $result_row['id'] ?>" >
+		<input type="text" name="id" value="<?php echo $result_row['id'] ?>" >
+		<div>
+		<label for="type_id" >Type Id</label>
+		<input type="text" id="type_id" name="type_id" data-restrict="numeric" value="<?php echo $result_row['type_id'] ?>" data-parsley-required data-parsley-type="integer" >
+		</div>
+		<div>
+		<label for="type_name" >Type Name</label>	<input type="text" id="type_name" name="type_name" value="<?php echo $result_row['type_name'] ?>" data-parsley-required data-parsley-minlength="4" >
+		</div>
+		<input type="submit" value="Update" >
+		</form>
+		<div style="width:100px;display:inline;"><button id="request_delete" class="action_btn" data-idx="<?php echo $result_row['id'] ?>">Delete</button></div>
+	</div>
+
+<?php } ?>
+<?php } elseif(1==0) { ?>
+<h2>Empty result set. No items to list.</h2>
+<?php } ?>
+	
+<?php 
+// FUTURE DEV: Dynamic form templates from JSON definitions
+function get_form_definition()
+{
+	$input_def_json = file_get_contents('./input_obj_types.json');
+
+	echo $input_def_json . "\n";
+
+	$input_def = json_decode($input_def_json,true); 
+}
+?>
