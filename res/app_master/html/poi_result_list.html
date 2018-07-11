@@ -1,0 +1,141 @@
+<!-- INPUT FORM -->
+<div class="form-style-10">
+	<h1>Create New Item<span>Create a new application object type.</span></h1>
+	<form id="form_1" action="#" method="post" data-parsley-trigger="focusin focusout">  
+		<!-- Hidden Inputs -->
+		<input type="hidden" id="ax" name="ax" value="new_item_1" >
+		<!-- User Inputs -->
+		<div class="section"><span>&#42;</span>Type ID &amp; Name</div>
+			<div class="inner-wrap">
+				<!-- Input 1 -->
+				<label>Latitude   <input type="text" id="type_id" name="type_id" value="" tabindex="1" data-parsley-required data-parsley-type="integer" ></label>
+				<!-- Input 2 -->
+				<label>Longitude <input type="text" id="type_name" name="type_name" value="" tabindex="2" data-parsley-required data-parsley-minlength="4" ></label>
+			</div>
+			
+			<div class="button-section">
+				<input type="submit" value="Enter" />
+			</div>
+	</form>
+</div>
+
+<!-- UPDATE LIST FORM -->
+<div class="form-style-10">
+<h1>Application Object Types<span>Update or Delete application objet types.</span></h1>
+
+<!-- UPDATE LIST SORT ORDER CONTROL -->
+<div class="section"><span>&#42;</span>Order &amp; Type</div>
+<div class="inner-wrap">
+	<form id="form_2" action="#" method="post" data-xxx-parsley-trigger="focusin focusout">
+			<!-- Hidden Inputs -->
+			<input type="hidden" id="ax" name="ax" value="sort_order" >
+			
+			<!-- User Inputs -->
+				<!-- Input 1 -->
+				<select name="sort_order">
+					<option value="0" <?php if($action_data['sort_order'] == 0) echo ' selected '; ?> >Ascending</option>
+					<option value="1" <?php if($action_data['sort_order'] == 1) echo ' selected '; ?> >Descending</option>
+				</select>
+			
+				<!-- Input 2 -->
+				<select name="sort_by">
+					<option value="0" <?php if($action_data['sort_by'] == 0) echo ' selected '; ?> >ID</option>
+					<option value="1" <?php if($action_data['sort_by'] == 1) echo ' selected '; ?> >Type ID</option>
+					<option value="2" <?php if($action_data['sort_by'] == 2) echo ' selected '; ?> >Type Name</option>
+				</select>
+				
+				<!-- Submit Button -->
+				<div>
+					<input type="submit" value="Sort" >
+				</div>
+	</form>
+</div>
+
+<!-- UPDATE LIST FORMS -->
+
+<?php do_list($action_data); ?>
+</div>
+
+<?php
+function do_list($action_data)
+{
+$form_def = array();
+$form_def['inputs'][] = array('label' => false,       'type' => 'hidden', 'name' => 'ax',        'value_type' => 'static', 'value' => 'update_item',  'data-x' => 'null');
+$form_def['inputs'][] = array('label' => false,       'type' => 'hidden', 'name' => 'appx',      'value_type' => 'static', 'value' => 'poi_manager',  'data-x' => 'null');
+$form_def['inputs'][] = array('label' => false,       'type' => 'hidden', 'name' => 'idx',       'value_type' => 'dynamic', 'value' => 'point_id',           'data-x' => 'null');
+//
+$form_def['inputs'][] = array('label' => 'ID',        'type' => 'text', 'name' => 'point_id',        'value_type' => 'dynamic', 'value' => 'point_id',           'data-x' => 'null');
+$form_def['inputs'][] = array('label' => 'LATITUDE',  'type' => 'text', 'name' => 'lat',   'value_type' => 'dynamic', 'value' => 'lat',      'data-x' => 'data-parsley-required data-parsley-type="integer"');
+$form_def['inputs'][] = array('label' => 'LONGITUDE', 'type' => 'text', 'name' => 'lon',   'value_type' => 'dynamic', 'value' => 'lon',        'data-x' => 'data-parsley-required data-parsley-type="integer"');
+
+	foreach($action_data['result_set'] as $index => $result)
+	{
+		$form_id = 'resultListItem-' . $index;
+		
+		echo '<div class="section"><span>&#42;</span> Item ID:' . $result['point_id'] .'</div>';
+		echo '<div class="inner-wrap">';
+				
+		echo '<form id="' . $form_id . '" data-parsley-trigger="focusin focusout">';
+		//echo '<legend>Item: ' . $result['id']  . '</legend>';
+		foreach($form_def['inputs'] as $key => $input_def)
+		{
+			do_input($key,$input_def,$result);
+		} // Row
+		
+		echo '<input type="submit" value="Update">';
+		echo '</form>';
+		
+		echo '<div style="width:100px;display:inline;"><button id="request_delete" class="local_action_btn action-button" data-idx="' . $result['point_id'] . '">Delete</button></div>';
+		echo '</div>';
+		
+	} 
+} // List 
+
+function do_input($input_index,$input_def,$input_data)
+{
+	if( $input_def['value_type'] == 'static' )
+	{
+		$tmp_input = $input_def['value'];
+	}
+	else
+	{
+		$tmp_input = $input_data[$input_def['value']];
+	}
+	
+	echo ($input_def['type'] != 'hidden') ? '<div class="" >' : '';
+	echo ($input_def['label'] === false || $input_def['type'] == 'hidden') ? '' : '<label>' . $input_def['label'] . '</label>';
+	echo '<input type="' . $input_def['type'] . '" name="' . $input_def['name'] . '" value="' . $tmp_input . '" ' . $input_def['data-x'] . ' >';
+	echo ($input_def['type'] != 'hidden') ? '</div>' : '';
+}
+
+?>
+
+<!-- BEGIN: Form Input -->
+<div id="form-input" class="form-input">
+	<p>Object Types - Create new.</p>
+	<form id="form_1" action="#" method="post" data-parsley-trigger="focusin focusout">
+	
+		<!-- Hidden Inputs -->
+		<input type="hidden" id="ax" name="ax" value="new_item_1" >
+		
+		<!-- Input 1 -->
+		<div>	
+			<label for="type_id">Type ID</label>   
+			<input type="text" id="type_id" name="type_id" value="" tabindex="1" data-parsley-required data-parsley-type="integer" >
+		</div>
+		
+		<!-- Input 2 -->
+		<div>
+			<label for="type_name">Type Name</label>
+			<input type="text" id="type_name" name="type_name" value="" tabindex="2" data-parsley-required data-parsley-minlength="4" >
+		</div>
+		
+		<!-- Submit Button -->
+		<div>
+			<input type="submit" value="Enter" >
+		</div>
+	
+	</form>
+	
+</div>
+<!-- END: Form Input -->

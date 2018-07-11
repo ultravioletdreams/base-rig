@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+		<!-- REQUIRED: JQuery JS -->
+		<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+		
+		<!-- CORE: App JS -->
+		<script src="./res/app_core/js/app.js"></script>
+		<script src="./res/app_core/js/app_form.js"></script>
+		
+		<!-- APP Startup JS -->
+		<script src="./res/app_master/js/app_startup.js"></script>
+		
+		<!-- App specific JS -->
+		<script src="./res/app_master/js/master_tables.js"></script>
+		
+		<!-- Parsley JS -->
+		<script src="./res/app_core/js/parsley.js"></script>
+		
+		<!-- Sweetalert JS -->
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
+		<!-- App CSS -->
+		<link rel="stylesheet" type="text/css" href="./res/app_core/css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="./res/app_master/css/default.css">
+		<link rel="stylesheet" type="text/css" href="./res/app_master/css/layout_1.css">
+		<link rel="stylesheet" type="text/css" href="./res/app_master/css/app_forms.css">
+		<!-- Parsley CSS -->
+		<link rel="stylesheet" type="text/css" href="./res/app_core/css/parsley.css">
+		
+		<!-- Page Title -->
+		<title><?php echo $action_data['app_title']; ?></title>
+	</head>
+	<body>
+		<!-- START: main container -->
+		<div id="main_container" class="main-container">
+		
+			<!-- START: App Header Container-->
+			<div class="app-header-container">
+				<!-- START: App Header -->
+				<div class="app-header">
+					<!-- App Title -->
+					<p class="app-title"><?php echo $action_data['app_title']; ?></p>
+				
+					<!-- START: App Main Menu -->
+					<div class="app-main-menu-container"> 
+						<ul class="app-main-menu" style="clear:both;">
+							<li><a class="action_btn" data-app-handler="app_master_tables" data-app-action="refresh_form" >Refresh View </a></li>
+							<li><a class="action_btn" data-app-handler="poi_manager"       data-app-action="poi_form"     >POI View     </a></li>
+							<li><a class="action_btn" data-app-handler="app_master_tables" data-app-action="todo"     >GEN Todo</a></li>
+							<li><a class="action_btn" data-app-handler="poi_manager"       data-app-action="todo"     >POI Todo</a></li>
+							<li><a class="action_btn" data-app-handler="app_master_tables"       data-app-action="dialogue"     >TEST DIALOGUE</a></li>
+						</ul>
+					</div>
+					<!-- END: App Main Menu -->
+				</div>
+				<!-- END: App Header -->
+			</div>
+			<!-- END: App Header Container -->
+			
+			<!-- START: Main Content -->
+			<div id="main_content" class="main-content">
+				<!-- PROGRESSS INDICATOR -->
+				<div id="loading" class="app-busy-indicator"><img src="./res/app_core/img/busy.gif" ></div>
+				<!-- APP FORM -->
+				<div id="update_form" class="app-form"></div>
+			</div>
+			<!-- END: Main Content -->
+			
+		</div>
+		<!-- END: main container -->
+	</body>
+</html>

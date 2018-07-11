@@ -6,9 +6,15 @@
 // PHP Class autoloader
 function class_autoload($class_name)
 {
+	$result = false;
 	$class_path = get_class_path($class_name);
-	if($class_path === false) die('FATAL ERROR: Class not found: ' . $class_name);
-	include $class_path;
+	if($class_path !== false)
+	{
+		include $class_path;
+		$result = true;
+	}
+
+	return $result;
 }
 
 // Get path to class
