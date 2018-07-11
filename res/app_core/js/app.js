@@ -73,6 +73,9 @@ function x_app()
 		// Application message handler
 		me.app_message(data);
 		
+		// Application dialog
+		me.app_dialog(data);
+		
 		// Update content handler
 		me.update_content(data);
 		
@@ -120,7 +123,29 @@ function x_app()
 			}
 		}
 	}
-
+	
+	// App dialogue
+	this.app_dialog = function(data)
+	{
+		if(typeof data['app_dialog'] != 'undefined')
+		{
+			// Get dialog params from response
+			var title    = data['app_dialog']['title'];
+			var message  = data['app_dialog']['message'];
+			var options  = data['app_dialog']['options'];
+			var callback = data['app_dialog']['callback'];
+			var type     = (typeof data['app_dialog']['type'] != 'undefined') ? data['app_dialog']['type'] : '';
+			
+			// Swet Alert and send resulting value remote using callback action
+			swal(title,message,type,options).then((value) => { 
+				console.log(value); 
+				var payload = {};
+				payload['result'] = value;
+				me.ajax_req(callback,payload);
+			});;
+		}
+	}
+	
 	// Show message
 	this.show_msg = function(value)
 	{

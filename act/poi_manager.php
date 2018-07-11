@@ -33,6 +33,13 @@ class poi_manager extends app_response
 		}
 	}	
 /********************************************************************************************************************************/
+// TODO LIST
+function todo()
+{
+	$this->set_message('TODO: Finish generic functions first!','','error');
+	$this->set_message('TODO:','Get started on paper plane...','info');
+}
+/********************************************************************************************************************************/
 // ACTION VIEW: SELECT - from poi table	
 	function poi_form()
 	{

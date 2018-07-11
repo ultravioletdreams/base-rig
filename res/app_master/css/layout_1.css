@@ -1,0 +1,99 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body{ margin:0px; background:#fff; }
+
+.action-button
+{
+	background: #2A88AD;
+	padding: 8px 20px 8px 20px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	color: #fff;
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+	font: normal 30px 'Bitter', serif;
+	-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+	-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+	box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+	border: 1px solid #257C9E;
+	font-size: 15px;
+}
+
+.app-header-container
+{
+	margin: 0;
+	padding: 0;
+	background:#F0F0F0;
+	position:fixed;
+	width:100%;
+	top:0;
+	z-index:10000;
+}
+
+.app-header
+{
+	margin: 0em;
+	padding: 0em;
+	background: #2A88AD;
+	height:100px;
+}
+
+.app-title
+{
+	margin: 0em;
+	padding: 1em;
+	font-weight:bold;
+	color:#fff;
+}
+
+.app-main-menu-container
+{
+	border-bottom:solid #000 1px;
+	position:absolute;
+	width:100%;
+	bottom:0;
+	left:0;
+}
+
+.app-main-menu
+{
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #999;
+}
+
+
+.app-main-menu li
+{
+	float:left;
+}
+
+.app-main-menu a
+{
+	display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.app-main-menu a:hover
+{
+	background-color: #111;
+}
+
+.active {
+    background-color: red;
+}
+
+.main-content
+{
+	margin-top:105px;
+}
+

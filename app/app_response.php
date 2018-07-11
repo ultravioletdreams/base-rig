@@ -85,10 +85,16 @@ class app_response
 		$this->response_data['callback_request'][$target_id]= $data;
 	}
 /********************************************************************************************************************************/
-// Response data setter
+// Set a message dialogue to be displayed on the client
 	function set_message($msg_title,$msg_text,$msg_type)
 	{
 		$this->response_data['app_message'][] = array($msg_title,$msg_text,$msg_type);
+	}
+/********************************************************************************************************************************/
+// Set a message dialogue to be displayed on the client
+	function set_dialog($msg_title,$msg_text,$msg_options)
+	{
+		$this->response_data['app_dialog'][] = array($msg_title,$msg_text,$msg_options);
 	}
 /********************************************************************************************************************************/
 // Generate HTML from template
@@ -107,7 +113,14 @@ class app_response
 		// Return generated (buffered) HTML
 		return $html;		
 	}
-
+/********************************************************************************************************************************/
+// Load JSON from file and return as PHP array
+	function load_json($json_path)
+	{
+		$json_string = file_get_contents($json_path);
+		$json_data = json_decode($json_string,true);
+		return $json_data; 
+	}
 /********************************************************************************************************************************/
 // Get POST request body and treat it as JSON
 	function get_post_body()
